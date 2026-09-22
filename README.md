@@ -1,56 +1,43 @@
-# TailAdmin Laravel - Tailwind CSS Free Laravel Dashboard
+# Sistem Delivery Tracking Unit
 
-**TailAdmin Laravel** is a modern, production-ready admin dashboard template powered by **Laravel 12**, **Tailwind CSS v4**, **Alpine.js**, and a clean, modular architecture. TailAdmin is one of the most popular Tailwind CSS dashboard now also available for Larvael. It’s designed for building fast, scalable admin panels, CRM dashboards, SaaS backends, and any data-driven application where clarity and performance matter.
-![TailAdmin - Next.js Dashboard Preview](./tailadmin-laravel.png)
+Aplikasi web untuk mengelola pengiriman unit kendaraan dari sisi administrator, driver, dan customer. Aplikasi ini menyediakan master data unit, customer, driver, order, invoice, pengiriman, serta halaman dashboard untuk memantau data operasional.
 
+## Fitur Utama
 
-## Quick Links
+- Dashboard admin dengan ringkasan customer, order, unit, driver, dan pendapatan yang sudah dibayar.
+- Manajemen data unit kendaraan.
+- Manajemen customer dan status aktif customer.
+- Manajemen driver beserta status ketersediaannya.
+- Pengelolaan order customer.
+- Invoice dan status pembayaran.
+- Pengelolaan pengiriman unit.
+- Tracking status pengiriman, lokasi, koordinat, dan catatan.
+- Bukti pengiriman.
+- Login berbasis role: admin, driver, dan customer.
+- Dark mode dan layout responsive.
 
-* [✨ Get TailAdmin Laravel](https://tailadmin.com/laravel)
-* [📄 Documentation](https://tailadmin.com/docs)
-* [⬇️ Download](https://tailadmin.com/download)
-* [🌐 Live Demo](https://laravel-demo.tailadmin.com)
+## Teknologi
 
-Here’s a tighter, more search-friendly version that highlights value and avoids fluff while keeping your structure intact.
+- PHP 8.2+
+- Laravel 12
+- Blade Components
+- Tailwind CSS 4
+- Alpine.js 3
+- Vite
+- MySQL 8 atau database Laravel lain yang kompatibel
+- Laravel Sail untuk lingkungan Docker
 
-## ✨ Key Features
+## Persyaratan
 
-* 🚀 **Laravel 12 Core** - Built on the latest Laravel release with improved routing, security, and Blade templating
-* 🎨 **Tailwind CSS v4** - Utility-first styling for rapid, consistent UI development
-* ⚡ **Alpine.js Interactivity** - Lightweight reactivity without a heavy JavaScript framework
-* 📦 **Vite Build System** - Fast dev server, instant HMR, and optimized production builds
-* 📱 **Fully Responsive Layouts** - Smooth, mobile-first design that adapts across all screen sizes
-* 🌙 **Built-in Dark Mode** - Ready-to-use modern dark theme for better usability and aesthetics
-* 📊 **Advanced UI Components** - Charts, data tables, forms, calendars, modals, and reusable blocks for complex dashboards
-* 🎯 **Production-Ready Dashboard UI** - Clean, modern interface crafted for real apps, not placeholder demos
+Pastikan perangkat sudah memiliki:
 
-### Other Versions
+- PHP >= 8.2
+- Composer
+- Node.js 22 dan npm
+- MySQL jika menjalankan aplikasi secara native
+- Docker Desktop jika menggunakan Sail
 
-- [Next.js Version](https://github.com/TailAdmin/free-nextjs-admin-dashboard)
-- [React.js Version](https://github.com/TailAdmin/free-react-tailwind-admin-dashboard)
-- [Vue.js Version](https://github.com/TailAdmin/vue-tailwind-admin-dashboard)
-- [Angular Version](https://github.com/TailAdmin/free-angular-tailwind-dashboard)
-- [Laravel Version](https://github.com/TailAdmin/tailadmin-laravel)
-
-## 📋 Requirements
-To set up TailAdmin Laravel, make sure your environment includes:
-
-* **PHP 8.2+**
-* **Composer** (PHP dependency manager)
-* **Node.js 18+** and **npm** (for compiling frontend assets)
-* **Database** - Works with SQLite (default), MySQL, or PostgreSQL
-
-### Tailwind CSS Laravel Dashboard
-
-TailAdmin delivers a refined Tailwind CSS Laravel Dashboard experience, combining Laravel’s robust backend with Tailwind’s flexible utility classes. The result is a clean, fast, and customizable dashboard that helps developers build modern admin interfaces without the usual front-end complexity. It’s ideal for teams looking for a Tailwind-powered Laravel starter that stays lightweight and easy to scale.
-
-### Laravel Admin Dashboard
-
-If you’re searching for a dependable Laravel Admin Dashboard template that’s easy to set up and ready for production, TailAdmin fits the job. It offers a polished UI, reusable components, optimized performance, and all the essentials needed to launch dashboards, CRM systems, and internal tools quickly. It gives developers a solid foundation, so projects move faster with fewer decisions to worry about.
-
-### Check Your Environment
-
-Verify your installations:
+Periksa instalasi dengan:
 
 ```bash
 php -v
@@ -59,472 +46,241 @@ node -v
 npm -v
 ```
 
-## 🐳 Docker & Laravel Sail Setup (Official)
+## Instalasi Lokal
 
-TailAdmin Laravel includes pre-configured, official support for **Docker** powered by **Laravel Sail** (PHP 8.4, MySQL 8.0, Redis, and Mailpit).
-
-### Prerequisites
-Make sure [Docker Desktop](https://www.docker.com/products/docker-desktop/) is installed and running on your machine.
-
-### Quick Start with Docker & Sail
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/TailAdmin/tailadmin-laravel.git
-   cd tailadmin-laravel
-   ```
-
-2. **Configure environment:**
-   ```bash
-   cp .env.example .env
-   ```
-   In your `.env` file, ensure container networking is set:
-   ```env
-   DB_HOST=mysql
-   DB_USERNAME=sail
-   DB_PASSWORD=password
-   REDIS_HOST=redis
-   ```
-
-3. **Install Composer dependencies (if PHP is not installed locally):**
-   ```bash
-   docker run --rm \
-       -u "$(id -u):$(id -g)" \
-       -v "$(pwd):/var/www/html" \
-       -w /var/www/html \
-       laravelsail/php84-composer:latest \
-       composer install --ignore-platform-reqs
-   ```
-   *(Or simply run `composer install` if you have PHP and Composer locally).*
-
-4. **Start Docker containers:**
-   ```bash
-   ./vendor/bin/sail up -d
-   ```
-
-5. **Generate application key & run migrations:**
-   ```bash
-   ./vendor/bin/sail artisan key:generate
-   ./vendor/bin/sail artisan migrate
-   ```
-
-6. **Install frontend dependencies & start Vite dev server:**
-   ```bash
-   ./vendor/bin/sail npm install
-   ./vendor/bin/sail npm run dev
-   ```
-
-7. **Access the application:**
-   - **TailAdmin Dashboard:** [http://localhost](http://localhost) (or [http://localhost:8000](http://localhost:8000) if `APP_PORT=8000`)
-   - **Vite Dev Server:** [http://localhost:5173](http://localhost:5173) (auto-proxied with HMR)
-   - **Mailpit Web UI:** [http://localhost:8025](http://localhost:8025)
-
-### Convenient Sail Shell Alias
-To avoid typing `./vendor/bin/sail` repeatedly, add an alias to your shell profile (`~/.zshrc` or `~/.bashrc`):
-```bash
-alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
-```
-Now you can run:
-```bash
-sail up -d
-sail artisan migrate
-sail npm run dev
-sail down
-```
-
-### Container Networking & Vite Architecture
-- **Vite Dev Server (Port 5173)**: Pre-configured in `vite.config.js` with `server.host: "0.0.0.0"` and `server.hmr.host: "localhost"`. This ensures the host browser can access assets directly without `ERR_EMPTY_RESPONSE` connection errors.
-- **Volume File Watcher**: File polling (`usePolling: true`) is enabled in `vite.config.js` to guarantee instant hot reload when editing code on macOS, Windows, or Linux host filesystems.
-- **Container Database Host**: Inside the Docker bridge network, services communicate via container names. Set `DB_HOST=mysql` and `REDIS_HOST=redis` inside Docker.
-- **Tailwind CSS v4**: Seamlessly compiled inside containers via `@tailwindcss/vite` without legacy v3 config conflicts.
-
----
-
-## 🚀 Quick Start Installation (Local / Native)
-
-### Step 1: Clone the Repository
+### 1. Clone repository
 
 ```bash
-git clone https://github.com/TailAdmin/tailadmin-laravel.git
-cd tailadmin-laravel
+git clone <url-repository>
+cd LIVE-TRACKING
 ```
 
-### Step 2: Install PHP Dependencies
+### 2. Install dependency
 
 ```bash
 composer install
-```
-
-This command will install all Laravel dependencies defined in `composer.json`.
-
-### Step 3: Install Node.js Dependencies
-
-```bash
 npm install
 ```
 
-Or if you prefer yarn or pnpm:
+### 3. Buat file environment
 
-```bash
-# Using yarn
-yarn install
-
-# Using pnpm
-pnpm install
-```
-
-### Step 4: Environment Configuration
-
-Copy the example environment file:
+Linux/macOS:
 
 ```bash
 cp .env.example .env
 ```
 
-**For Windows users:**
+Windows PowerShell:
 
-```bash
-copy .env.example .env
+```powershell
+Copy-Item .env.example .env
 ```
 
-**Or create it programmatically:**
-
-```bash
-php -r "file_exists('.env') || copy('.env.example', '.env');"
-```
-
-### Step 5: Generate Application Key
+Generate application key:
 
 ```bash
 php artisan key:generate
 ```
 
-This creates a unique encryption key for your application.
+### 4. Konfigurasi database
 
-### Step 6: Configure Database
-
-#### Option A: Using MySQL/PostgreSQL
-
-Update your `.env` file with your database credentials:
+Atur koneksi database di `.env`. Contoh menggunakan MySQL lokal:
 
 ```env
+APP_NAME="Sistem Delivery Tracking Unit"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=tailadmin_db
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
+DB_DATABASE=delivery_tracking
+DB_USERNAME=root
+DB_PASSWORD=
 ```
 
-Create the database:
+Buat database `delivery_tracking`, lalu jalankan migration dan seeder:
 
 ```bash
-# MySQL
-mysql -u root -p -e "CREATE DATABASE tailadmin_db;"
-
-# PostgreSQL
-createdb tailadmin_db
+php artisan migrate --seed
 ```
 
-Run migrations:
+Untuk mengulang database dari awal:
 
 ```bash
-php artisan migrate
+php artisan migrate:fresh --seed
 ```
 
-### Step 7: (Optional) Seed the Database
+### 5. Jalankan aplikasi
 
-If you want sample data:
+Gunakan dua terminal:
+
+Terminal 1:
 
 ```bash
-php artisan db:seed
+php artisan serve
 ```
 
-### Step 8: Storage Link
-
-Create a symbolic link for file storage:
+Terminal 2:
 
 ```bash
-php artisan storage:link
+npm run dev
 ```
 
-## 🏃 Running the Application
+Buka [http://localhost:8000](http://localhost:8000).
 
-### Development Mode (Recommended)
-
-The easiest way to start development is using the built-in script:
+Alternatif, gunakan script Composer:
 
 ```bash
 composer run dev
 ```
 
-This single command starts:
-- ✅ Laravel development server (http://localhost:8000)
-- ✅ Vite dev server for hot module reloading
-- ✅ Queue worker for background jobs
-- ✅ Log monitoring
+Script tersebut menjalankan server Laravel, Vite, queue worker, dan log viewer secara bersamaan.
 
-**Access your application at:** [http://localhost:8000](http://localhost:8000)
+## Menjalankan dengan Docker / Sail
 
-### Manual Development Setup
+Pastikan Docker Desktop aktif dan dependency Composer sudah terpasang.
 
-If you prefer to run services individually in separate terminal windows:
-
-**Terminal 1 - Laravel Server:**
 ```bash
-php artisan serve
+cp .env.example .env
+php artisan key:generate
+./vendor/bin/sail up -d
+./vendor/bin/sail artisan migrate --seed
+./vendor/bin/sail npm install
+./vendor/bin/sail npm run dev
 ```
 
-**Terminal 2 - Frontend Assets:**
-```bash
-npm run dev
+Windows PowerShell dapat menggunakan perintah berikut:
+
+```powershell
+Copy-Item .env.example .env
+php artisan key:generate
+vendor/bin/sail up -d
+vendor/bin/sail artisan migrate --seed
+vendor/bin/sail npm install
+vendor/bin/sail npm run dev
 ```
 
-### Building for Production
+Alamat layanan default:
 
-#### Build Frontend Assets
+- Aplikasi: [http://localhost](http://localhost)
+- Vite: [http://localhost:5173](http://localhost:5173)
+- Mailpit: [http://localhost:8025](http://localhost:8025)
+
+## Akun Demo
+
+Akun berikut dibuat oleh `UserSeeder`:
+
+| Role     | Email                 | Password   |
+| -------- | --------------------- | ---------- |
+| Admin    | `admin@anugerah.com`  | `password` |
+| Driver   | `budi@anugerah.com`   | `password` |
+| Driver   | `agus@anugerah.com`   | `password` |
+| Driver   | `roni@anugerah.com`   | `password` |
+| Customer | `lamongan@dealer.com` | `password` |
+| Customer | `tuban@dealer.com`    | `password` |
+| Customer | `cepu@dealer.com`     | `password` |
+
+Jangan gunakan password demo untuk lingkungan production.
+
+## Struktur Modul
+
+```text
+app/
+├── Http/Controllers/       Controller aplikasi dan admin
+├── Http/Middleware/        Middleware autentikasi dan role
+├── Models/                 Model User, Unit, Order, Invoice, Driver, dan lainnya
+└── View/Components/        Class-based Blade components
+
+database/
+├── migrations/             Struktur tabel aplikasi
+└── seeders/                Data awal untuk pengembangan
+
+resources/
+├── css/                    Tailwind CSS
+├── js/                     Alpine.js, ApexCharts, dan modul frontend
+└── views/                  Layout, halaman, dan Blade components
+
+routes/
+└── web.php                 Route autentikasi, admin, driver, dan customer
+```
+
+## Route Utama
+
+| Route                 | Akses    | Keterangan              |
+| --------------------- | -------- | ----------------------- |
+| `/`                   | Guest    | Halaman login           |
+| `/signup`             | Guest    | Registrasi customer     |
+| `/admin/dashboard`    | Admin    | Dashboard administrator |
+| `/driver/dashboard`   | Driver   | Dashboard driver        |
+| `/customer/dashboard` | Customer | Dashboard customer      |
+| `/admin/units`        | Admin    | Data unit               |
+| `/admin/customers`    | Admin    | Data customer           |
+| `/admin/drivers`      | Admin    | Data driver             |
+
+Lihat seluruh route dengan:
+
+```bash
+php artisan route:list
+```
+
+## Build Production
+
+Build asset frontend:
 
 ```bash
 npm run build
 ```
 
-#### Optimize Laravel
+Optimasi Laravel:
 
 ```bash
-# Clear and cache configuration
-php artisan config:cache
-
-# Cache routes
-php artisan route:cache
-
-# Cache views
-php artisan view:cache
-
-# Optimize autoloader
-composer install --optimize-autoloader --no-dev
+php artisan optimize
 ```
 
-#### Production Environment
-
-Update your `.env` for production:
+Contoh environment production:
 
 ```env
 APP_ENV=production
 APP_DEBUG=false
-APP_URL=https://yourdomain.com
+APP_URL=https://example.com
 ```
 
+## Testing dan Validasi
 
-## 🧪 Testing
-
-Run the test suite using Pest:
+Jalankan test suite:
 
 ```bash
-composer run test
+composer test
 ```
 
-Or manually:
+Atau:
 
 ```bash
 php artisan test
 ```
 
-Run with coverage:
+Validasi Blade:
 
 ```bash
-php artisan test --coverage
+php artisan view:cache
 ```
 
-Run specific tests:
+Clear cache aplikasi:
 
-```bash
-php artisan test --filter=ExampleTest
-```
-
-## 📜 Available Commands
-
-### Composer Scripts
-
-```bash
-# Start development environment
-composer run dev
-
-# Run tests
-composer run test
-
-# Code formatting (if configured)
-composer run format
-
-# Static analysis (if configured)
-composer run analyze
-```
-
-### NPM Scripts
-
-```bash
-# Start Vite dev server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Lint JavaScript/TypeScript
-npm run lint
-
-# Format code
-npm run format
-```
-
-### Artisan Commands
-
-```bash
-# Start development server
-php artisan serve
-
-# Run migrations
-php artisan migrate
-
-# Rollback migrations
-php artisan migrate:rollback
-
-# Fresh migrations with seeding
-php artisan migrate:fresh --seed
-
-# Generate application key
-php artisan key:generate
-
-# Clear all caches
-php artisan optimize:clear
-
-# Cache everything for production
-php artisan optimize
-
-# Create symbolic link for storage
-php artisan storage:link
-
-# Start queue worker
-php artisan queue:work
-
-# List all routes
-php artisan route:list
-
-# Create a new controller
-php artisan make:controller YourController
-
-# Create a new model
-php artisan make:model YourModel -m
-
-# Create a new migration
-php artisan make:migration create_your_table
-```
-
-## 📁 Project Structure
-
-```
-tailadmin-laravel/
-├── app/                    # Application logic
-│   ├── Http/              # Controllers, Middleware, Requests
-│   ├── Models/            # Eloquent models
-│   └── Providers/         # Service providers
-├── bootstrap/             # Framework bootstrap files
-├── config/                # Configuration files
-├── database/              # Migrations, seeders, factories
-│   ├── migrations/
-│   ├── seeders/
-│   └── factories/
-├── public/                # Public assets (entry point)
-│   ├── build/            # Compiled assets (generated)
-│   └── index.php         # Application entry point
-├── resources/             # Views and raw assets
-│   ├── css/              # Stylesheets (Tailwind)
-│   ├── js/               # JavaScript files (Alpine.js)
-│   └── views/            # Blade templates
-├── routes/                # Route definitions
-│   ├── web.php           # Web routes
-│   ├── api.php           # API routes
-│   └── console.php       # Console routes
-├── storage/               # Logs, cache, uploads
-│   ├── app/
-│   ├── framework/
-│   └── logs/
-├── tests/                 # Pest test files
-│   ├── Feature/
-│   └── Unit/
-├── docker-compose.yml     # Docker & Laravel Sail configuration
-├── .env.example           # Example environment file
-├── artisan                # Artisan CLI
-├── composer.json          # PHP dependencies
-├── package.json           # Node dependencies
-├── vite.config.js         # Vite configuration with container networking
-└── resources/css/app.css  # Tailwind CSS v4 configuration (@theme)
-```
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-#### "Class not found" errors
-```bash
-composer dump-autoload
-```
-
-#### Permission errors on storage/bootstrap/cache
-```bash
-chmod -R 775 storage bootstrap/cache
-```
-
-#### NPM build errors
-```bash
-rm -rf node_modules package-lock.json
-npm install
-```
-
-#### Clear all caches
 ```bash
 php artisan optimize:clear
 ```
 
-#### Database connection errors
-- Check `.env` database credentials
-- Ensure database server is running
-- Verify database exists
+## Catatan Pengembangan
 
-## 🔄 Update Log
+- Gunakan logical CSS utilities Tailwind untuk menjaga dukungan RTL.
+- Simpan komponen reusable di `resources/views/components`.
+- Tambahkan migration baru untuk perubahan schema database.
+- Jalankan `php artisan migrate --seed` setelah menyiapkan database development.
+- Jangan menyimpan file `.env`, credential, atau data production ke repository.
 
-### [1.1.2] - 2026-09-02
+## Lisensi
 
-- **Dependency updates**: FullCalendar upgraded to v7 and ApexCharts / Swiper bumped to latest versions.
-- **RTL layout support**: Added right-to-left (RTL) direction support with automatic layout flipping and toggle.
-- **Language / RTL switcher**: Added switcher in user dropdown with persistent direction state in `localStorage`.
-- **Keyboard & dropdown improvements**: Enhanced dropdown behavior and click-outside handling.
-- **Tailwind CSS v4 optimizations**: Applied CSS logical properties across sidebar, tables, header, and components.
-
-
-### [2026-05-23]
-
-- Added **AI Settings** page to configure models, keys, and token limits.
-- Added **Maps** page with MapLibre GL, Leaflet, and iframe styles.
-- Added **Vector Maps** page powered by AmCharts 5 geodata (World & USA).
-- Added **Radar Charts** page with 3 unique formats.
-- Added **Radial Progress Charts** page featuring 4 custom layout templates.
-- Introduced new **Bar Charts Five & Six** and **Pie Charts Four & Five**.
-
-### [April 28, 2026]
-- Added **AI Dashboard** with token usage and revenue tracking.
-- Added **Sales Dashboard** with retention and multi-channel analytics.
-- Added **Finance Dashboard** with cashflow and balance management.
-- Introduced **6 New Layout variations** for improved UI flexibility.
-- Integrated **Advanced Data Visualization** with 7+ new chart types.
-
-### [2026-03-15]
-- Fixed PHP 8.5 deprecation warning
-
-### [2025-12-29]
-- Added Date Picker in Statistics Chart
-
-## License
-
-Refer to our [LICENSE](https://tailadmin.com/license) page for more information.
+Proyek ini menggunakan lisensi yang tercantum pada file `LICENSE`.
