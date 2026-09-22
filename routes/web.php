@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DriverController;
+use App\Http\Controllers\Admin\OrderController;
 
 // Locale Switch Route
 Route::get('/locale/{locale}', [LocaleController::class, 'switch'])->name('locale.switch');
@@ -42,8 +43,14 @@ Route::middleware(['auth', 'role:admin'])
             'customers/{customer}/toggle-active',
             [CustomerController::class, 'toggleActive']
         )->name('customers.toggle-active');
-
+        
+        //Data Driver
         Route::resource('drivers', DriverController::class)->except(['show']);
+        
+        // Orders
+        Route::resource('orders', OrderController::class)->only(['index', 'show']);
+        Route::post('orders/{order}/approve', [OrderController::class, 'approve'])->name('orders.approve');
+        Route::post('orders/{order}/reject',  [OrderController::class, 'reject'])->name('orders.reject');
     });
 
 // ── Driver ───────────────────────────────────────────────────

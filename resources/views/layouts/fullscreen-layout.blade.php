@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/assets/logo.png') }}">
 
     <title>{{ $title ?? 'Dashboard' }} | CV. Anugerah Bojonegoro</title>
 
@@ -12,7 +13,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Alpine.js -->
-    {{-- <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script> --}}
+    {{--
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script> --}}
 
     <!-- Theme Store -->
     <script>
@@ -75,7 +77,7 @@
 
     <!-- Apply dark mode immediately to prevent flash -->
     <script>
-        (function() {
+        (function () {
             const savedTheme = localStorage.getItem('theme');
             const theme = savedTheme === 'dark' ? 'dark' : 'light';
             if (theme === 'dark') {
@@ -89,7 +91,7 @@
     </script>
     <!-- Apply RTL mode immediately to prevent flash -->
     <script>
-        (function() {
+        (function () {
             const savedDir = localStorage.getItem("dir");
             if (savedDir === "rtl") {
                 document.documentElement.setAttribute("dir", "rtl");
