@@ -13,9 +13,8 @@ class Driver extends Model
 
     protected $fillable = [
         'id_user',
-        'nama_driver',
-        'no_hp',
         'no_ktp',
+        'no_sim',
         'status',
     ];
 
@@ -35,5 +34,21 @@ class Driver extends Model
     public function pengiriman()
     {
         return $this->hasMany(Pengiriman::class, 'id_driver');
+    }
+
+    // ── Scope ───────────────────────────────────────────────
+    public function scopeTersedia($query)
+    {
+        return $query->where('status', 'tersedia');
+    }
+
+    // ── Helper ──────────────────────────────────────────────
+    public function getStatusBadgeColorAttribute(): string
+    {
+        return match($this->status) {
+            'tersedia' => 'success',
+            'bertugas' => 'warning',
+            default    => 'default',
+        };
     }
 }

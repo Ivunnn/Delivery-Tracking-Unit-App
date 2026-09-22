@@ -5,6 +5,8 @@ use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\DriverController;
 
 // Locale Switch Route
 Route::get('/locale/{locale}', [LocaleController::class, 'switch'])->name('locale.switch');
@@ -30,15 +32,18 @@ Route::middleware(['auth', 'role:admin'])
     ->name('admin.')
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
-    });
-Route::middleware(['auth', 'role:admin'])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
 
         // Data Unit
         Route::resource('units', UnitController::class);
+
+        // Data Customer
+        Route::resource('customers', CustomerController::class)->except(['show']);
+        Route::patch(
+            'customers/{customer}/toggle-active',
+            [CustomerController::class, 'toggleActive']
+        )->name('customers.toggle-active');
+
+        Route::resource('drivers', DriverController::class)->except(['show']);
     });
 
 // ── Driver ───────────────────────────────────────────────────

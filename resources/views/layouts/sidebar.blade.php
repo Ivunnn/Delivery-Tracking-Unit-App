@@ -62,7 +62,7 @@
                 <img class="dark:hidden" src="/images/assets/logo-bg-dark.png" alt="Logo" width="150" height="40" />
                 <img class="hidden dark:block" src="/images/assets/logo-bg-light.png" alt="Logo" width="150" height="40" />
             </div>
-            <img class="block [.sidebar-expanded_&]:hidden" src="/images/logo/logo-icon.svg" alt="Logo" width="32" height="32" />
+            <img class="block [.sidebar-expanded_&]:hidden" src="/images/assets/logo.png" alt="Logo" width="64" height="64" />
         </a>
     </div>
 

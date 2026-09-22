@@ -17,6 +17,9 @@ class User extends Authenticatable
         'password',
         'role',
         'is_active',
+        'nama_toko',
+        'alamat',
+        'kota',
     ];
 
     protected $hidden = [
@@ -49,18 +52,29 @@ class User extends Authenticatable
         return $this->role === 'customer';
     }
 
-    // ── Relasi ──────────────────────────────────────────────
-    public function customer()
+    // ── Scope ───────────────────────────────────────────────
+    public function scopeCustomers($query)
     {
-        return $this->hasOne(Customer::class);
+        return $query->where('role', 'customer');
     }
 
+    public function scopeDrivers($query)
+    {
+        return $query->where('role', 'driver');
+    }
+
+    // ── Relasi ──────────────────────────────────────────────
     public function driver()
     {
-        return $this->hasOne(Driver::class);
+        return $this->hasOne(Driver::class, 'id_user');
     }
 
-    public function notifications()
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'id_customer');
+    }
+
+    public function notifikasi()
     {
         return $this->hasMany(Notifikasi::class, 'id_user');
     }
