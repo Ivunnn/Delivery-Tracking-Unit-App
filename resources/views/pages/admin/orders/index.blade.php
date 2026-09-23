@@ -14,7 +14,7 @@
         {{-- Badge ringkasan --}}
         <div class="flex items-center gap-2">
             <span class="inline-flex items-center rounded-full bg-warning-50 px-3 py-1 text-xs font-medium text-warning-600 dark:bg-warning-500/15 dark:text-warning-400">
-                {{ \App\Models\Order::menunggu()->count() }} Menunggu
+                {{ number_format($pendingCount) }} Menunggu
             </span>
         </div>
     </div>
@@ -43,7 +43,7 @@
         <form method="GET" action="{{ route('admin.orders.index') }}"
             class="flex flex-col gap-3 sm:flex-row sm:items-center">
             <div class="relative flex-1">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <span class="absolute start-3 top-1/2 -translate-y-1/2 text-gray-400">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -51,10 +51,10 @@
                 </span>
                 <input type="text" name="search" value="{{ request('search') }}"
                     placeholder="Cari kode order, nama customer, tipe motor..."
-                    class="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-9 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                    class="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 ps-9 pe-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
             </div>
             <select name="status"
-                class="rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 focus:outline-hidden sm:w-auto dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
                 <option value="">Semua Status</option>
                 <option value="menunggu"  {{ request('status') === 'menunggu'  ? 'selected' : '' }}>Menunggu</option>
                 <option value="disetujui" {{ request('status') === 'disetujui' ? 'selected' : '' }}>Disetujui</option>
@@ -62,12 +62,12 @@
                 <option value="selesai"   {{ request('status') === 'selesai'   ? 'selected' : '' }}>Selesai</option>
             </select>
             <button type="submit"
-                class="rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 transition">
+                class="w-full rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-600 sm:w-auto">
                 Cari
             </button>
             @if(request('search') || request('status'))
                 <a href="{{ route('admin.orders.index') }}"
-                    class="rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 transition dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800">
+                    class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-center text-sm font-medium text-gray-600 transition hover:bg-gray-50 sm:w-auto dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800">
                     Reset
                 </a>
             @endif
@@ -77,30 +77,38 @@
     {{-- Tabel --}}
     <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+            @php
+                $statusColors = [
+                    'warning' => 'bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-warning-400',
+                    'success' => 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-400',
+                    'error'   => 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-400',
+                    'default' => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
+                ];
+            @endphp
+            <table class="w-full min-w-[760px] text-sm">
                 <thead>
                     <tr class="border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
-                        <th class="px-6 py-4 text-left font-semibold text-gray-600 dark:text-gray-400">No</th>
-                        <th class="px-6 py-4 text-left font-semibold text-gray-600 dark:text-gray-400">Kode Order</th>
-                        <th class="px-6 py-4 text-left font-semibold text-gray-600 dark:text-gray-400">Customer</th>
-                        <th class="px-6 py-4 text-left font-semibold text-gray-600 dark:text-gray-400">Unit</th>
-                        <th class="px-6 py-4 text-left font-semibold text-gray-600 dark:text-gray-400">Harga</th>
-                        <th class="px-6 py-4 text-left font-semibold text-gray-600 dark:text-gray-400">Tanggal</th>
-                        <th class="px-6 py-4 text-left font-semibold text-gray-600 dark:text-gray-400">Status</th>
-                        <th class="px-6 py-4 text-center font-semibold text-gray-600 dark:text-gray-400">Aksi</th>
+                        <th class="whitespace-nowrap px-3 py-4 text-start font-semibold text-gray-600 sm:px-6 dark:text-gray-400">No</th>
+                        <th class="whitespace-nowrap px-3 py-4 text-start font-semibold text-gray-600 sm:px-6 dark:text-gray-400">Kode Order</th>
+                        <th class="whitespace-nowrap px-3 py-4 text-start font-semibold text-gray-600 sm:px-6 dark:text-gray-400">Customer</th>
+                        <th class="whitespace-nowrap px-3 py-4 text-start font-semibold text-gray-600 sm:px-6 dark:text-gray-400">Unit</th>
+                        <th class="whitespace-nowrap px-3 py-4 text-start font-semibold text-gray-600 sm:px-6 dark:text-gray-400">Harga</th>
+                        <th class="whitespace-nowrap px-3 py-4 text-start font-semibold text-gray-600 sm:px-6 dark:text-gray-400">Tanggal</th>
+                        <th class="whitespace-nowrap px-3 py-4 text-start font-semibold text-gray-600 sm:px-6 dark:text-gray-400">Status</th>
+                        <th class="whitespace-nowrap px-3 py-4 text-center font-semibold text-gray-600 sm:px-6 dark:text-gray-400">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                     @forelse ($orders as $order)
                         @php $badge = $order->status_badge; @endphp
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition">
-                            <td class="px-6 py-4 text-gray-500 dark:text-gray-400">
+                            <td class="px-3 py-4 text-gray-500 sm:px-6 dark:text-gray-400">
                                 {{ $orders->firstItem() + $loop->index }}
                             </td>
-                            <td class="px-6 py-4 font-mono text-xs font-medium text-gray-800 dark:text-white/90">
+                            <td class="px-3 py-4 font-mono text-xs font-medium text-gray-800 sm:px-6 dark:text-white/90">
                                 {{ $order->kode_order }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-3 py-4 sm:px-6">
                                 <div class="font-medium text-gray-800 dark:text-white/90">
                                     {{ $order->customer->name }}
                                 </div>
@@ -108,32 +116,24 @@
                                     <div class="text-xs text-gray-400">{{ $order->customer->nama_toko }}</div>
                                 @endif
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-3 py-4 sm:px-6">
                                 <div class="font-medium text-gray-800 dark:text-white/90">
                                     {{ $order->unit->tipe_motor }}
                                 </div>
                                 <div class="text-xs text-gray-400 font-mono">{{ $order->unit->no_rangka }}</div>
                             </td>
-                            <td class="px-6 py-4 text-gray-600 dark:text-gray-400">
+                            <td class="px-3 py-4 text-gray-600 sm:px-6 dark:text-gray-400">
                                 {{ $order->unit->harga_format ?? '-' }}
                             </td>
-                            <td class="px-6 py-4 text-gray-600 dark:text-gray-400">
+                            <td class="px-3 py-4 text-gray-600 sm:px-6 dark:text-gray-400">
                                 {{ $order->created_at->format('d M Y') }}
                             </td>
-                            <td class="px-6 py-4">
-                                @php
-                                    $colors = [
-                                        'warning' => 'bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-warning-400',
-                                        'success' => 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-400',
-                                        'error'   => 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-400',
-                                        'default' => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
-                                    ];
-                                @endphp
-                                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $colors[$badge['color']] }}">
+                            <td class="px-3 py-4 sm:px-6">
+                                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $statusColors[$badge['color']] ?? $statusColors['default'] }}">
                                     {{ $badge['label'] }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-center">
+                            <td class="px-3 py-4 text-center sm:px-6">
                                 <a href="{{ route('admin.orders.show', $order) }}"
                                     class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 transition dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

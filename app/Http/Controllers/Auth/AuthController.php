@@ -40,8 +40,7 @@ class AuthController extends Controller
                 ]);
         }
 
-        // Attempt login
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (! Hash::check($credentials['password'], $user->password)) {
             return back()
                 ->withInput($request->only('email'))
                 ->withErrors([
@@ -49,6 +48,7 @@ class AuthController extends Controller
                 ]);
         }
 
+        Auth::login($user, $request->boolean('remember'));
         $request->session()->regenerate();
 
         return $this->redirectByRole(Auth::user()->role);

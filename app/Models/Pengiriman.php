@@ -59,8 +59,8 @@ class Pengiriman extends Model
     // ── Helper ──────────────────────────────────────────────
     public static function generateKode(): string
     {
-        $latest = self::latest()->first();
-        $number = $latest ? ((int) substr($latest->kode_pengiriman, -4)) + 1 : 1;
+        $latestCode = self::latest()->value('kode_pengiriman');
+        $number = $latestCode ? ((int) substr($latestCode, -4)) + 1 : 1;
         return 'DTU-' . date('Y') . '-' . str_pad($number, 4, '0', STR_PAD_LEFT);
     }
 

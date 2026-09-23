@@ -1,5 +1,7 @@
 
 
+import ApexCharts from 'apexcharts';
+
 export function initChartSix() {
     const chartSixEl = document.querySelector('#chartSix');
     if (chartSixEl) {

@@ -14,7 +14,21 @@ class OrderController extends Controller
     // ── Index ────────────────────────────────────────────────
     public function index(Request $request)
     {
-        $query = Order::with(['customer', 'unit', 'invoice'])->latest();
+        $query = Order::query()
+            ->select([
+                'id',
+                'id_customer',
+                'id_unit',
+                'kode_order',
+                'status',
+                'created_at',
+            ])
+            ->with([
+                'customer:id,name,nama_toko',
+                'unit:id,tipe_motor,no_rangka,harga',
+                'invoice:id,id_order,total',
+            ])
+            ->latest();
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -36,15 +50,23 @@ class OrderController extends Controller
         $orders = $query->paginate(10)->withQueryString();
 
         return view('pages.admin.orders.index', [
-            'title'  => 'Kelola Order',
-            'orders' => $orders,
+            'title'        => 'Kelola Order',
+            'orders'       => $orders,
+            'pendingCount' => Order::menunggu()->count(),
         ]);
     }
 
     // ── Show ─────────────────────────────────────────────────
     public function show(Order $order)
     {
-        $order->load(['customer', 'unit', 'invoice', 'pengiriman.driver.user']);
+        $order->load([
+            'customer:id,name,email,phone,nama_toko,kota,alamat',
+            'unit:id,tipe_motor,no_rangka,warna,tahun,harga',
+            'invoice:id,id_order,kode_invoice,harga,biaya_pengiriman,total,status_bayar,paid_at',
+            'pengiriman:id,id_order,id_driver,kode_pengiriman,tanggal_kirim,estimasi_tiba,tujuan,status',
+            'pengiriman.driver:id,id_user,no_ktp,no_sim,status',
+            'pengiriman.driver.user:id,name,email,phone',
+        ]);
 
         return view('pages.admin.orders.show', [
             'title' => 'Detail Order',
@@ -59,6 +81,8 @@ class OrderController extends Controller
             return redirect()->route('admin.orders.show', $order)
                 ->with('error', 'Order ini sudah diproses sebelumnya.');
         }
+
+        $order->load('unit:id,harga,status');
 
         DB::transaction(function () use ($order) {
             // Update status order
