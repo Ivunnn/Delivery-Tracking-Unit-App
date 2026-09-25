@@ -62,17 +62,18 @@
 
                             {{-- Tanggal --}}
                             <p class="text-xs text-gray-400">
-                                Tanggal kirim: {{ $item->tanggal_kirim->format('d M Y') }}
+                                Tanggal kirim:
+                                {{ $item->tanggal_kirim?->format('d M Y') ?? 'Belum ditentukan' }}
                                 @if ($item->estimasi_tiba)
                                     · Estimasi tiba: {{ $item->estimasi_tiba->format('d M Y') }}
                                 @endif
                             </p>
 
                             {{-- Update terakhir --}}
-                            @if ($item->trackingTerakhir)
+                            @if ($item->latestTracking?->jam_update)
                                 <p class="text-xs text-brand-500">
-                                    Update terakhir: {{ $item->trackingTerakhir->status_tracking }}
-                                    · {{ $item->trackingTerakhir->jam_update->diffForHumans() }}
+                                    Update terakhir: {{ $item->latestTracking->status_tracking }}
+                                    · {{ $item->latestTracking->jam_update->diffForHumans() }}
                                 </p>
                             @else
                                 <p class="text-xs text-gray-400">Belum ada update dari driver</p>

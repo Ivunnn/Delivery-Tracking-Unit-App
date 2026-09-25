@@ -257,7 +257,7 @@
                     <div>
                         <dt class="text-xs text-gray-400 mb-0.5">Tanggal Kirim</dt>
                         <dd class="text-sm text-gray-800 dark:text-white/90">
-                            {{ $pengiriman->tanggal_kirim->format('d M Y') }}</dd>
+                            {{ $pengiriman->tanggal_kirim?->format('d M Y') ?? 'Belum ditentukan' }}</dd>
                     </div>
                     @if ($pengiriman->estimasi_tiba)
                         <div>
@@ -337,7 +337,7 @@
                                     @endif
                                 </div>
                                 <time class="text-xs text-gray-400 shrink-0 ml-4">
-                                    {{ $track->jam_update->format('d M Y, H:i') }}
+                                    {{ $track->jam_update?->format('d M Y, H:i') ?? '-' }}
                                 </time>
                             </div>
                         </li>

@@ -46,10 +46,17 @@ class Pengiriman extends Model
         return $this->hasMany(Tracking::class, 'id_pengiriman')->latest('jam_update');
     }
 
+    public function latestTracking()
+    {
+        return $this->hasOne(Tracking::class, 'id_pengiriman')->latestOfMany('jam_update');
+    }
+
     // Hapus trackingTerakhir() relasi, ganti dengan accessor ini
     public function getTrackingTerakhirAttribute()
     {
-        return $this->trackings->first();
+        return $this->relationLoaded('latestTracking')
+            ? $this->getRelation('latestTracking')
+            : $this->trackings->first();
     }
 
     public function buktiPengiriman()

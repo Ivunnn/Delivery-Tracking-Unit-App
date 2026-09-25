@@ -7,6 +7,37 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
+        // The original migration may have stopped after creating the first
+        // invoices table. Repair that partial state without deleting data.
+        if (Schema::hasTable('users')) {
+            if (Schema::hasTable('invoices')) {
+                Schema::table('invoices', function (Blueprint $table) {
+                    if (! Schema::hasColumn('invoices', 'bukti_bayar')) {
+                        $table->string('bukti_bayar')->nullable();
+                    }
+
+                    if (! Schema::hasColumn('invoices', 'tgl_upload_bukti')) {
+                        $table->timestamp('tgl_upload_bukti')->nullable();
+                    }
+
+                    if (! Schema::hasColumn('invoices', 'status_verifikasi')) {
+                        $table->enum('status_verifikasi', [
+                            'belum_upload',
+                            'menunggu_verifikasi',
+                            'diterima',
+                            'ditolak',
+                        ])->default('belum_upload');
+                    }
+
+                    if (! Schema::hasColumn('invoices', 'catatan_tolak')) {
+                        $table->text('catatan_tolak')->nullable();
+                    }
+                });
+            }
+
+            return;
+        }
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -90,6 +121,15 @@ return new class extends Migration {
                 'sudah_bayar',
             ])->default('belum_bayar');
             $table->timestamp('paid_at')->nullable();
+            $table->string('bukti_bayar')->nullable();
+            $table->timestamp('tgl_upload_bukti')->nullable();
+            $table->enum('status_verifikasi', [
+                'belum_upload',
+                'menunggu_verifikasi',
+                'diterima',
+                'ditolak',
+            ])->default('belum_upload');
+            $table->text('catatan_tolak')->nullable();
             $table->timestamps();
         });
 
@@ -129,6 +169,17 @@ return new class extends Migration {
             $table->text('keterangan')->nullable();
             $table->timestamp('waktu_upload')->useCurrent();
         });
+
+        Schema::create('rekening_bank', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama_bank', 50);
+            $table->string('no_rekening', 30);
+            $table->string('atas_nama', 100);
+            $table->string('logo', 100)->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+
     }
 
     public function down(): void
@@ -138,6 +189,7 @@ return new class extends Migration {
         Schema::dropIfExists('pengiriman');
         Schema::dropIfExists('invoices');
         Schema::dropIfExists('orders');
+        Schema::dropIfExists('rekening_bank');
         Schema::dropIfExists('drivers');
         Schema::dropIfExists('units');
         Schema::dropIfExists('sessions');

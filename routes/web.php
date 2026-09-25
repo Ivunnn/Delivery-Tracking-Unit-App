@@ -16,6 +16,7 @@ use App\Http\Controllers\Customer\InvoiceCustomerController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Customer\TrackingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\RekeningBankController;
 
 
 // Locale Switch Route
@@ -63,6 +64,8 @@ Route::middleware(['auth', 'role:admin'])
         Route::post('orders/{order}/approve', [OrderController::class, 'approve'])->name('orders.approve');
         Route::post('orders/{order}/reject', [OrderController::class, 'reject'])->name('orders.reject');
 
+        // Rekening Bank
+        Route::resource('rekening', RekeningBankController::class);
 
         // Pengiriman
         Route::resource('pengiriman', PengirimanController::class)
@@ -86,6 +89,16 @@ Route::middleware(['auth', 'role:admin'])
             [InvoiceController::class, 'print']
         )
             ->name('invoices.print');
+        Route::post(
+            'invoices/{invoice}/verifikasi-bukti',
+            [InvoiceController::class, 'verifikasiBukti']
+        )
+            ->name('invoices.verifikasi-bukti');
+        Route::post(
+            'invoices/{invoice}/tolak-bukti',
+            [InvoiceController::class, 'tolakBukti']
+        )
+            ->name('invoices.tolak-bukti');
     });
 
 // ── Driver ───────────────────────────────────────────────────
@@ -149,6 +162,12 @@ Route::middleware(['auth', 'role:customer'])
         Route::get('/tracking', [TrackingController::class, 'index'])->name('tracking.index');
         Route::get('/tracking/{pengiriman}', [TrackingController::class, 'show'])->name('tracking.show');
         Route::get('/tracking/{pengiriman}/data', [TrackingController::class, 'data'])->name('tracking.data');
+
+        Route::post(
+            'invoices/{invoice}/upload-bukti',
+            [InvoiceCustomerController::class, 'uploadBukti']
+        )
+            ->name('invoices.upload-bukti');
     });
 
 

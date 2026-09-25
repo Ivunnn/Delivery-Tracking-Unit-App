@@ -29,14 +29,23 @@ class PengirimanDriverController extends Controller
         $driver = $this->getDriver();
 
         $aktif = Pengiriman::query()
-            ->select(['id', 'id_order', 'kode_pengiriman', 'tujuan', 'status', 'created_at'])
+            ->select([
+                'id',
+                'id_order',
+                'kode_pengiriman',
+                'tanggal_kirim',
+                'estimasi_tiba',
+                'tujuan',
+                'status',
+                'created_at',
+            ])
             ->where('id_driver', $driver->id)
             ->whereNotIn('status', ['selesai'])
             ->with([
                 'order:id,id_customer,id_unit',
                 'order.customer:id,name',
                 'order.unit:id,tipe_motor',
-                'trackings:id,id_pengiriman,status_tracking,jam_update',
+                'latestTracking',
             ])
             ->latest()
             ->limit(5)
@@ -67,14 +76,23 @@ class PengirimanDriverController extends Controller
         $driver = $this->getDriver();
 
         $pengiriman = Pengiriman::query()
-            ->select(['id', 'id_order', 'kode_pengiriman', 'tujuan', 'status', 'created_at'])
+            ->select([
+                'id',
+                'id_order',
+                'kode_pengiriman',
+                'tanggal_kirim',
+                'estimasi_tiba',
+                'tujuan',
+                'status',
+                'created_at',
+            ])
             ->where('id_driver', $driver->id)
             ->whereNotIn('status', ['selesai'])
             ->with([
                 'order:id,id_customer,id_unit',
                 'order.customer:id,name',
                 'order.unit:id,tipe_motor',
-                'trackings:id,id_pengiriman,status_tracking,jam_update',
+                'latestTracking',
             ])
             ->latest()
             ->paginate(10);
@@ -91,7 +109,16 @@ class PengirimanDriverController extends Controller
         $driver = $this->getDriver();
 
         $query = Pengiriman::query()
-            ->select(['id', 'id_order', 'kode_pengiriman', 'tujuan', 'status', 'created_at'])
+            ->select([
+                'id',
+                'id_order',
+                'kode_pengiriman',
+                'tanggal_kirim',
+                'estimasi_tiba',
+                'tujuan',
+                'status',
+                'created_at',
+            ])
             ->where('id_driver', $driver->id)
             ->where('status', 'selesai')
             ->with([

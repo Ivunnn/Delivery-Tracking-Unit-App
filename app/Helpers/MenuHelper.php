@@ -11,11 +11,11 @@ class MenuHelper
     {
         $role = Auth::user()?->role ?? 'guest';
 
-        return match($role) {
-            'admin'    => self::getAdminMenu(),
-            'driver'   => self::getDriverMenu(),
+        return match ($role) {
+            'admin' => self::getAdminMenu(),
+            'driver' => self::getDriverMenu(),
             'customer' => self::getCustomerMenu(),
-            default    => [],
+            default => [],
         };
     }
 
@@ -51,6 +51,11 @@ class MenuHelper
                         'name' => 'Data Driver',
                         'path' => '/admin/drivers',
                     ],
+                    [
+                        'icon' => 'email',
+                        'name' => 'Rekening Bank',
+                        'path' => '/admin/rekening',
+                    ],
                 ],
             ],
             [
@@ -80,16 +85,6 @@ class MenuHelper
                         'icon' => 'email',
                         'name' => 'Invoice',
                         'path' => '/admin/invoices',
-                    ],
-                ],
-            ],
-            [
-                'title' => 'Laporan',
-                'items' => [
-                    [
-                        'icon' => 'pages',
-                        'name' => 'Laporan Pengiriman',
-                        'path' => '/admin/laporan',
                     ],
                 ],
             ],

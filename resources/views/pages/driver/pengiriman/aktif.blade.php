@@ -55,17 +55,17 @@
                                 📍 {{ $item->tujuan }}
                             </p>
                             <p class="text-xs text-gray-400">
-                                @if ($item->tanggal_kirim)
-                                    Tanggal kirim: {{ $item->tanggal_kirim->format('d M Y') }}
+                            @if ($item->tanggal_kirim || $item->estimasi_tiba)
+                                Tanggal kirim: {{ $item->tanggal_kirim?->format('d M Y') ?? 'Belum ditentukan' }}
                                 @endif
                                 @if ($item->estimasi_tiba)
                                     · Estimasi tiba: {{ $item->estimasi_tiba->format('d M Y') }}
                                 @endif
                                 </p>
-                                @if ($item->tracking)
+                                @if ($item->latestTracking?->jam_update)
                                     <p class="text-xs text-brand-500">
-                                        Update terakhir: {{ $item->tracking->status_tracking }}
-                                        · {{ $item->tracking->jam_update->diffForHumans() }}
+                                        Update terakhir: {{ $item->latestTracking->status_tracking }}
+                                        · {{ $item->latestTracking->jam_update->diffForHumans() }}
                                     </p>
                                 @endif
                         </div>

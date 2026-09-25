@@ -11,9 +11,26 @@ class TrackingController extends Controller
     // ── Index — Daftar Pengiriman Customer ───────────────────────
     public function index()
     {
-        $pengiriman = Pengiriman::whereHas('order', fn($q) =>
-            $q->where('id_customer', Auth::id()))
-            ->with(['order.unit', 'driver.user', 'trackings'])
+        $pengiriman = Pengiriman::query()
+            ->select([
+                'id',
+                'id_order',
+                'id_driver',
+                'kode_pengiriman',
+                'tanggal_kirim',
+                'estimasi_tiba',
+                'tujuan',
+                'status',
+                'created_at',
+            ])
+            ->whereHas('order', fn($q) => $q->where('id_customer', Auth::id()))
+            ->with([
+                'order:id,id_customer,id_unit',
+                'order.unit:id,tipe_motor,warna',
+                'driver:id,id_user',
+                'driver.user:id,name',
+                'latestTracking',
+            ])
             ->latest()
             ->paginate(10);
 
@@ -22,7 +39,7 @@ class TrackingController extends Controller
             'pengiriman' => $pengiriman,
         ]);
     }
-    
+
     // ── Show Halaman Tracking ────────────────────────────────
     public function show(Pengiriman $pengiriman)
     {
@@ -55,7 +72,7 @@ class TrackingController extends Controller
             'lat' => $t->lat,
             'lng' => $t->lng,
             'catatan' => $t->catatan,
-            'jam_update' => $t->jam_update->format('d M Y, H:i'),
+            'jam_update' => $t->jam_update?->format('d M Y, H:i'),
         ]);
 
         $terakhir = $pengiriman->trackings->first();
@@ -69,7 +86,7 @@ class TrackingController extends Controller
                 'lng' => $terakhir->lng,
                 'lokasi' => $terakhir->lokasi,
                 'status_tracking' => $terakhir->status_tracking,
-                'jam_update' => $terakhir->jam_update->format('d M Y, H:i'),
+                'jam_update' => $terakhir->jam_update?->format('d M Y, H:i'),
             ] : null,
             'koordinat' => $trackings
                 ->filter(fn($t) => $t['lat'] && $t['lng'])

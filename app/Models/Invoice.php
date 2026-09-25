@@ -19,19 +19,35 @@ class Invoice extends Model
         'total',
         'status_bayar',
         'paid_at',
+        'bukti_bayar',
+        'tgl_upload_bukti',
+        'status_verifikasi',
+        'catatan_tolak',
     ];
 
     protected function casts(): array
     {
         return [
-            'harga'            => 'decimal:2',
+            'harga' => 'decimal:2',
             'biaya_pengiriman' => 'decimal:2',
-            'total'            => 'decimal:2',
-            'paid_at'          => 'datetime',
-            'status_bayar'     => 'string',
+            'total' => 'decimal:2',
+            'paid_at' => 'datetime',
+            'tgl_upload_bukti' => 'datetime',
+            'status_bayar' => 'string',
+            'status_verifikasi' => 'string',
         ];
     }
 
+    public function getStatusVerifikasiBadgeAttribute(): array
+    {
+        return match ($this->status_verifikasi) {
+            'belum_upload' => ['label' => 'Belum Upload', 'color' => 'default'],
+            'menunggu_verifikasi' => ['label' => 'Menunggu Verifikasi', 'color' => 'warning'],
+            'diterima' => ['label' => 'Bukti Diterima', 'color' => 'success'],
+            'ditolak' => ['label' => 'Bukti Ditolak', 'color' => 'error'],
+            default => ['label' => '-', 'color' => 'default'],
+        };
+    }
     // ── Relasi ──────────────────────────────────────────────
     public function order()
     {

@@ -113,7 +113,7 @@
             <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
                 <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Posisi Driver</h3>
                 <span class="text-xs text-gray-400" id="last-update-label">
-                    Update terakhir: {{ $pengiriman->trackings->first()?->jam_update->format('H:i') }} WIB
+                    Update terakhir: {{ $pengiriman->trackings->first()?->jam_update?->format('H:i') ?? '-' }} WIB
                 </span>
             </div>
             <div id="map" style="height: 320px; z-index: 0;"></div>
@@ -171,7 +171,7 @@
                                             @endif
                                         </div>
                                         <time class="text-xs text-gray-400 shrink-0">
-                                            {{ $track->jam_update->format('d M Y, H:i') }}
+                                            {{ $track->jam_update?->format('d M Y, H:i') ?? '-' }}
                                         </time>
                                     </div>
                                 </li>
@@ -234,7 +234,7 @@
                     </div>
                     <div>
                         <dt class="text-xs text-gray-400 mb-0.5">Tanggal Kirim</dt>
-                        <dd class="text-sm text-gray-800 dark:text-white/90">{{ $pengiriman->tanggal_kirim->format('d M Y') }}</dd>
+                        <dd class="text-sm text-gray-800 dark:text-white/90">{{ $pengiriman->tanggal_kirim?->format('d M Y') ?? 'Belum ditentukan' }}</dd>
                     </div>
                     @if ($pengiriman->estimasi_tiba)
                         <div>
