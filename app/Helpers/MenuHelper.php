@@ -93,6 +93,16 @@ class MenuHelper
                     ],
                 ],
             ],
+            [
+                'title' => 'Akun',
+                'items' => [
+                    [
+                        'icon' => 'user-profile',
+                        'name' => 'Profil Saya',
+                        'path' => '/admin/profile',
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -122,6 +132,16 @@ class MenuHelper
                         'icon' => 'tables',
                         'name' => 'Riwayat Pengiriman',
                         'path' => '/driver/pengiriman/riwayat',
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Akun',
+                'items' => [
+                    [
+                        'icon' => 'user-profile',
+                        'name' => 'Profil Saya',
+                        'path' => '/driver/profile',
                     ],
                 ],
             ],

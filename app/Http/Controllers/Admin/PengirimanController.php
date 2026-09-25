@@ -14,12 +14,17 @@ class PengirimanController extends Controller
     // ── Index ────────────────────────────────────────────────
     public function index(Request $request)
     {
-        $query = Pengiriman::with([
-            'order.customer',
-            'order.unit',
-            'driver.user',
-            'trackingTerakhir',
-        ])->latest();
+        $query = Pengiriman::query()
+            ->select(['id', 'id_order', 'id_driver', 'kode_pengiriman', 'tanggal_kirim', 'estimasi_tiba', 'tujuan', 'status', 'created_at'])
+            ->with([
+                'order:id,id_customer,id_unit',
+                'order.customer:id,name,nama_toko',
+                'order.unit:id,tipe_motor,warna',
+                'driver:id,id_user',
+                'driver.user:id,name,phone',
+                'trackings:id,id_pengiriman,status_tracking,jam_update',
+            ])
+            ->latest();
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -50,21 +55,33 @@ class PengirimanController extends Controller
     public function create(Request $request)
     {
         // Order yang sudah disetujui tapi belum punya pengiriman
-        $orders = Order::with(['customer', 'unit'])
+        $orders = Order::query()
+            ->select(['id', 'id_customer', 'id_unit', 'kode_order'])
+            ->with([
+                'customer:id,name,nama_toko',
+                'unit:id,tipe_motor,warna',
+            ])
             ->where('status', 'disetujui')
             ->whereDoesntHave('pengiriman')
             ->latest()
             ->get();
 
         // Driver yang tersedia
-        $drivers = Driver::with('user')
+        $drivers = Driver::query()
+            ->select(['id', 'id_user'])
+            ->with('user:id,name,phone')
             ->where('status', 'tersedia')
             ->get();
 
         // Pre-select order jika dari halaman show order
         $selectedOrder = null;
         if ($request->filled('order_id')) {
-            $selectedOrder = Order::with(['customer', 'unit'])
+            $selectedOrder = Order::query()
+                ->select(['id', 'id_customer', 'id_unit', 'kode_order'])
+                ->with([
+                    'customer:id,name,nama_toko',
+                    'unit:id,tipe_motor,warna',
+                ])
                 ->find($request->order_id);
         }
 
@@ -95,15 +112,29 @@ class PengirimanController extends Controller
             'tujuan.required'        => 'Tujuan pengiriman wajib diisi.',
         ]);
 
-        // Cek order belum punya pengiriman
-        $order = Order::findOrFail($validated['id_order']);
-        if ($order->pengiriman) {
-            return back()->with('error', 'Order ini sudah memiliki pengiriman.');
-        }
+        $created = DB::transaction(function () use ($validated) {
+            $order = Order::query()
+                ->whereKey($validated['id_order'])
+                ->lockForUpdate()
+                ->firstOrFail();
 
-        DB::transaction(function () use ($validated, $order) {
+            if ($order->status !== 'disetujui' || $order->pengiriman()->exists()) {
+                return false;
+            }
+
+            $driver = Driver::query()
+                ->whereKey($validated['id_driver'])
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            if ($driver->status !== 'tersedia') {
+                return false;
+            }
+
+            $unit = $order->unit()->lockForUpdate()->firstOrFail();
+
             // Buat pengiriman
-            $pengiriman = Pengiriman::create([
+            Pengiriman::create([
                 'id_order'        => $order->id,
                 'id_driver'       => $validated['id_driver'],
                 'kode_pengiriman' => Pengiriman::generateKode(),
@@ -114,12 +145,17 @@ class PengirimanController extends Controller
             ]);
 
             // Update status driver jadi bertugas
-            $driver = Driver::findOrFail($validated['id_driver']);
             $driver->update(['status' => 'bertugas']);
 
             // Update status unit jadi dikirim
-            $order->unit->update(['status' => 'dikirim']);
+            $unit->update(['status' => 'dikirim']);
+
+            return true;
         });
+
+        if (! $created) {
+            return back()->with('error', 'Order atau driver sudah tidak tersedia.');
+        }
 
         return redirect()->route('admin.pengiriman.index')
             ->with('success', 'Pengiriman berhasil dibuat.');

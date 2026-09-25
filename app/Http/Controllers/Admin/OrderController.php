@@ -77,14 +77,21 @@ class OrderController extends Controller
     // ── Approve ──────────────────────────────────────────────
     public function approve(Order $order)
     {
-        if ($order->status !== 'menunggu') {
-            return redirect()->route('admin.orders.show', $order)
-                ->with('error', 'Order ini sudah diproses sebelumnya.');
-        }
+        $approved = DB::transaction(function () use ($order) {
+            $order = Order::query()
+                ->whereKey($order->id)
+                ->lockForUpdate()
+                ->firstOrFail();
 
-        $order->load('unit:id,harga,status');
+            if ($order->status !== 'menunggu') {
+                return false;
+            }
 
-        DB::transaction(function () use ($order) {
+            $unit = Unit::query()
+                ->whereKey($order->id_unit)
+                ->lockForUpdate()
+                ->firstOrFail();
+
             // Update status order
             $order->update([
                 'status'      => 'disetujui',
@@ -92,10 +99,10 @@ class OrderController extends Controller
             ]);
 
             // Update status unit jadi dipesan
-            $order->unit->update(['status' => 'dipesan']);
+            $unit->update(['status' => 'dipesan']);
 
             // Buat invoice otomatis
-            $harga            = $order->unit->harga ?? 0;
+            $harga            = $unit->harga ?? 0;
             $biaya_pengiriman = 0;
 
             Invoice::create([
@@ -106,7 +113,14 @@ class OrderController extends Controller
                 'total'            => $harga + $biaya_pengiriman,
                 'status_bayar'     => 'belum_bayar',
             ]);
+
+            return true;
         });
+
+        if (! $approved) {
+            return redirect()->route('admin.orders.show', $order)
+                ->with('error', 'Order ini sudah diproses sebelumnya.');
+        }
 
         return redirect()->route('admin.orders.show', $order)
             ->with('success', 'Order berhasil disetujui dan invoice otomatis dibuat.');

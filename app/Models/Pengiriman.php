@@ -26,7 +26,7 @@ class Pengiriman extends Model
         return [
             'tanggal_kirim' => 'date',
             'estimasi_tiba' => 'date',
-            'status'        => 'string',
+            'status' => 'string',
         ];
     }
 
@@ -46,9 +46,10 @@ class Pengiriman extends Model
         return $this->hasMany(Tracking::class, 'id_pengiriman')->latest('jam_update');
     }
 
-    public function trackingTerakhir()
+    // Hapus trackingTerakhir() relasi, ganti dengan accessor ini
+    public function getTrackingTerakhirAttribute()
     {
-        return $this->hasOne(Tracking::class, 'id_pengiriman')->latestOfMany('jam_update');
+        return $this->trackings->first();
     }
 
     public function buktiPengiriman()
@@ -66,13 +67,13 @@ class Pengiriman extends Model
 
     public function getStatusBadgeAttribute(): array
     {
-        return match($this->status) {
-            'menunggu'         => ['label' => 'Menunggu',          'color' => 'default'],
-            'berangkat'        => ['label' => 'Berangkat',         'color' => 'info'],
-            'dalam_perjalanan' => ['label' => 'Dalam Perjalanan',  'color' => 'warning'],
-            'tiba'             => ['label' => 'Tiba di Lokasi',    'color' => 'success'],
-            'selesai'          => ['label' => 'Selesai',           'color' => 'success'],
-            default            => ['label' => '-',                 'color' => 'default'],
+        return match ($this->status) {
+            'menunggu' => ['label' => 'Menunggu', 'color' => 'default'],
+            'berangkat' => ['label' => 'Berangkat', 'color' => 'info'],
+            'dalam_perjalanan' => ['label' => 'Dalam Perjalanan', 'color' => 'warning'],
+            'tiba' => ['label' => 'Tiba di Lokasi', 'color' => 'success'],
+            'selesai' => ['label' => 'Selesai', 'color' => 'success'],
+            default => ['label' => '-', 'color' => 'default'],
         };
     }
 }

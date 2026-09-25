@@ -12,6 +12,10 @@ use App\Http\Controllers\Admin\PengirimanController;
 use App\Http\Controllers\Driver\PengirimanDriverController;
 use App\Http\Controllers\Customer\KatalogController;
 use App\Http\Controllers\Customer\OrderCustomerController;
+use App\Http\Controllers\Customer\InvoiceCustomerController;
+use App\Http\Controllers\Admin\InvoiceController;
+use App\Http\Controllers\Customer\TrackingController;
+use App\Http\Controllers\ProfileController;
 
 
 // Locale Switch Route
@@ -38,6 +42,8 @@ Route::middleware(['auth', 'role:admin'])
     ->name('admin.')
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
         // Data Unit
         Route::resource('units', UnitController::class);
@@ -57,9 +63,29 @@ Route::middleware(['auth', 'role:admin'])
         Route::post('orders/{order}/approve', [OrderController::class, 'approve'])->name('orders.approve');
         Route::post('orders/{order}/reject', [OrderController::class, 'reject'])->name('orders.reject');
 
+
         // Pengiriman
         Route::resource('pengiriman', PengirimanController::class)
             ->only(['index', 'create', 'store', 'show']);
+
+        // Invoice
+        Route::resource('invoices', InvoiceController::class)
+            ->only(['index', 'show']);
+        Route::post(
+            'invoices/{invoice}/konfirmasi-bayar',
+            [InvoiceController::class, 'konfirmasiBayar']
+        )
+            ->name('invoices.konfirmasi-bayar');
+        Route::post(
+            'invoices/{invoice}/update-biaya',
+            [InvoiceController::class, 'updateBiaya']
+        )
+            ->name('invoices.update-biaya');
+        Route::get(
+            'invoices/{invoice}/print',
+            [InvoiceController::class, 'print']
+        )
+            ->name('invoices.print');
     });
 
 // ── Driver ───────────────────────────────────────────────────
@@ -69,6 +95,8 @@ Route::middleware(['auth', 'role:driver'])
     ->group(function () {
         Route::get('/dashboard', [PengirimanDriverController::class, 'dashboard'])
             ->name('dashboard');
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
         Route::get('/pengiriman/aktif', [PengirimanDriverController::class, 'aktif'])
             ->name('pengiriman.aktif');
@@ -79,12 +107,16 @@ Route::middleware(['auth', 'role:driver'])
         Route::get('/pengiriman/{pengiriman}', [PengirimanDriverController::class, 'show'])
             ->name('pengiriman.show');
 
-        Route::post('/pengiriman/{pengiriman}/update-status',
-            [PengirimanDriverController::class, 'updateStatus'])
+        Route::post(
+            '/pengiriman/{pengiriman}/update-status',
+            [PengirimanDriverController::class, 'updateStatus']
+        )
             ->name('pengiriman.update-status');
 
-        Route::post('/pengiriman/{pengiriman}/upload-bukti',
-            [PengirimanDriverController::class, 'uploadBukti'])
+        Route::post(
+            '/pengiriman/{pengiriman}/upload-bukti',
+            [PengirimanDriverController::class, 'uploadBukti']
+        )
             ->name('pengiriman.upload-bukti');
     });
 
@@ -94,6 +126,8 @@ Route::middleware(['auth', 'role:customer'])
     ->name('customer.')
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'customer'])->name('dashboard');
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
         // Katalog
         Route::get('/katalog', [KatalogController::class, 'index'])->name('katalog.index');
@@ -104,6 +138,17 @@ Route::middleware(['auth', 'role:customer'])
         Route::get('/orders', [OrderCustomerController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order}', [OrderCustomerController::class, 'show'])->name('orders.show');
         Route::post('/orders/{order}/cancel', [OrderCustomerController::class, 'cancel'])->name('orders.cancel');
+
+        Route::get('/invoices/{invoice}/print', [InvoiceCustomerController::class, 'print'])->name('invoices.print');
+
+        // Invoice
+        Route::get('/invoices', [InvoiceCustomerController::class, 'index'])->name('invoices.index');
+        Route::get('/invoices/{invoice}', [InvoiceCustomerController::class, 'show'])->name('invoices.show');
+
+        // Tracking
+        Route::get('/tracking', [TrackingController::class, 'index'])->name('tracking.index');
+        Route::get('/tracking/{pengiriman}', [TrackingController::class, 'show'])->name('tracking.show');
+        Route::get('/tracking/{pengiriman}/data', [TrackingController::class, 'data'])->name('tracking.data');
     });
 
 
@@ -114,10 +159,6 @@ Route::middleware(['auth', 'role:customer'])
 // })->name('dashboard');
 
 // calender pages
-
-
-
-
 
 
 

@@ -1,0 +1,1 @@
+@include('shared.invoice-print', ['invoice' => $invoice])

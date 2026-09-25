@@ -78,9 +78,41 @@ class DashboardController extends Controller
 
     public function customer()
     {
+        $customerId = Auth::id();
+        $ordersQuery = Order::where('id_customer', $customerId);
+
+        $recentOrders = (clone $ordersQuery)
+            ->select([
+                'id',
+                'id_customer',
+                'id_unit',
+                'kode_order',
+                'status',
+                'created_at',
+            ])
+            ->with([
+                'unit:id,tipe_motor,warna,harga',
+                'invoice:id,id_order,total,status_bayar',
+                'pengiriman:id,id_order,kode_pengiriman,status',
+            ])
+            ->latest()
+            ->limit(5)
+            ->get();
+
         return view('pages.customer.dashboard', [
-            'title' => 'Dashboard Customer',
-            'user' => Auth::user(),
+            'title'         => 'Dashboard Customer',
+            'user'          => Auth::user(),
+            'totalOrders'   => (clone $ordersQuery)->count(),
+            'activeOrders'  => (clone $ordersQuery)
+                ->whereIn('status', ['menunggu', 'disetujui'])
+                ->count(),
+            'completedOrders' => (clone $ordersQuery)
+                ->where('status', 'selesai')
+                ->count(),
+            'unpaidInvoices' => (clone $ordersQuery)
+                ->whereHas('invoice', fn ($query) => $query->where('status_bayar', 'belum_bayar'))
+                ->count(),
+            'recentOrders'  => $recentOrders,
         ]);
     }
 }

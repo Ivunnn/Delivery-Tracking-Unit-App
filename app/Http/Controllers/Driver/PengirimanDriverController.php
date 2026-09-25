@@ -17,7 +17,10 @@ class PengirimanDriverController extends Controller
     // ── Ambil driver yang login ──────────────────────────────
     private function getDriver(): Driver
     {
-        return Driver::where('id_user', Auth::id())->firstOrFail();
+        return Driver::query()
+            ->select(['id', 'id_user', 'status'])
+            ->where('id_user', Auth::id())
+            ->firstOrFail();
     }
 
     // ── Dashboard ────────────────────────────────────────────
@@ -25,17 +28,29 @@ class PengirimanDriverController extends Controller
     {
         $driver = $this->getDriver();
 
-        $aktif = Pengiriman::where('id_driver', $driver->id)
+        $aktif = Pengiriman::query()
+            ->select(['id', 'id_order', 'kode_pengiriman', 'tujuan', 'status', 'created_at'])
+            ->where('id_driver', $driver->id)
             ->whereNotIn('status', ['selesai'])
-            ->with(['order.customer', 'order.unit', 'trackingTerakhir'])
+            ->with([
+                'order:id,id_customer,id_unit',
+                'order.customer:id,name',
+                'order.unit:id,tipe_motor',
+                'trackings:id,id_pengiriman,status_tracking,jam_update',
+            ])
             ->latest()
+            ->limit(5)
             ->get();
 
-        $totalSelesai = Pengiriman::where('id_driver', $driver->id)
-            ->where('status', 'selesai')
-            ->count();
-
-        $totalSemua = Pengiriman::where('id_driver', $driver->id)->count();
+        $totals = Pengiriman::query()
+            ->where('id_driver', $driver->id)
+            ->selectRaw(
+                'COUNT(*) as total, SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as selesai',
+                ['selesai']
+            )
+            ->first();
+        $totalSemua = (int) $totals->total;
+        $totalSelesai = (int) $totals->selesai;
 
         return view('pages.driver.dashboard', [
             'title'        => 'Dashboard Driver',
@@ -51,9 +66,16 @@ class PengirimanDriverController extends Controller
     {
         $driver = $this->getDriver();
 
-        $pengiriman = Pengiriman::where('id_driver', $driver->id)
+        $pengiriman = Pengiriman::query()
+            ->select(['id', 'id_order', 'kode_pengiriman', 'tujuan', 'status', 'created_at'])
+            ->where('id_driver', $driver->id)
             ->whereNotIn('status', ['selesai'])
-            ->with(['order.customer', 'order.unit', 'trackingTerakhir'])
+            ->with([
+                'order:id,id_customer,id_unit',
+                'order.customer:id,name',
+                'order.unit:id,tipe_motor',
+                'trackings:id,id_pengiriman,status_tracking,jam_update',
+            ])
             ->latest()
             ->paginate(10);
 
@@ -68,9 +90,15 @@ class PengirimanDriverController extends Controller
     {
         $driver = $this->getDriver();
 
-        $query = Pengiriman::where('id_driver', $driver->id)
+        $query = Pengiriman::query()
+            ->select(['id', 'id_order', 'kode_pengiriman', 'tujuan', 'status', 'created_at'])
+            ->where('id_driver', $driver->id)
             ->where('status', 'selesai')
-            ->with(['order.customer', 'order.unit'])
+            ->with([
+                'order:id,id_customer,id_unit',
+                'order.customer:id,name,nama_toko',
+                'order.unit:id,tipe_motor,warna',
+            ])
             ->latest();
 
         if ($request->filled('search')) {
