@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Invoice;
 use App\Models\Driver;
+use App\Models\Invoice;
 use App\Models\Order;
+use App\Models\Pengiriman;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -13,66 +14,88 @@ class DashboardController extends Controller
 {
     public function admin()
     {
-        $recentOrders = Order::with(['customer', 'unit', 'invoice'])
+        // Statistik utama
+        $totalCustomer = User::customers()->count();
+        $totalOrder = Order::count();
+        $totalUnit = Unit::count();
+        $totalDriver = Driver::count();
+        $totalPendapatan = Invoice::where('status_bayar', 'sudah_bayar')->sum('total');
+
+        // Order menunggu persetujuan
+        $orderMenunggu = Order::menunggu()->count();
+
+        // Pengiriman aktif
+        $pengirimanAktif = Pengiriman::whereNotIn('status', ['selesai'])->count();
+
+        // Bukti transfer menunggu verifikasi
+        $buktiMenunggu = Invoice::where('status_verifikasi', 'menunggu_verifikasi')->count();
+
+        // Recent orders (5 terbaru)
+        $recentOrders = Order::with(['customer', 'unit'])
             ->latest()
-            ->limit(5)
-            ->get()
-            ->map(function (Order $order, int $index): array {
-                $status = match ($order->status) {
-                    'selesai' => 'Delivered',
-                    'ditolak' => 'Canceled',
-                    default => 'Pending',
-                };
+            ->take(5)
+            ->get();
 
-                return [
-                    'name' => $order->unit?->tipe_motor ?? $order->kode_order,
-                    'variants' => 1,
-                    'image' => '/images/product/product-0' . (($index % 5) + 1) . '.jpg',
-                    'category' => $order->customer?->name ?? 'Customer',
-                    'price' => 'Rp ' . number_format(
-                        (float) ($order->invoice?->total ?? $order->unit?->harga ?? 0),
-                        0,
-                        ',',
-                        '.'
-                    ),
-                    'status' => $status,
-                ];
-            })
-            ->all();
-
-        $customerCount = User::customers()->count();
-
-        $customersByCity = User::customers()
-            ->selectRaw("COALESCE(kota, 'Unknown') as name, COUNT(*) as customers")
-            ->groupBy('kota')
-            ->orderByDesc('customers')
+        // Pengiriman aktif list (5 terbaru)
+        $pengirimanAktifList = Pengiriman::with(['order.customer', 'order.unit', 'driver.user'])
+            ->whereNotIn('status', ['selesai'])
+            ->latest()
+            ->take(5)
             ->get();
 
         return view('pages.admin.dashboard', [
-            'title' => 'Dashboard Admin',
-            'user' => Auth::user(),
-            'customerCount' => $customerCount,
-            'orderCount' => Order::count(),
-            'unitCount' => Unit::count(),
-            'driverCount' => Driver::count(),
-            'revenue' => Invoice::where('status_bayar', 'sudah_bayar')->sum('total'),
+            'title' => 'Dashboard',
+            'totalCustomer' => $totalCustomer,
+            'totalOrder' => $totalOrder,
+            'totalUnit' => $totalUnit,
+            'totalDriver' => $totalDriver,
+            'totalPendapatan' => $totalPendapatan,
+            'orderMenunggu' => $orderMenunggu,
+            'pengirimanAktif' => $pengirimanAktif,
+            'buktiMenunggu' => $buktiMenunggu,
             'recentOrders' => $recentOrders,
-            'countries' => $customersByCity->map(fn($city) => [
-                'name' => $city->name,
-                'flag' => '/images/country/country-01.svg',
-                'customers' => number_format($city->customers),
-                'percentage' => $customerCount > 0
-                    ? (int) round(($city->customers / $customerCount) * 100)
-                    : 0,
-            ])->all(),
+            'pengirimanAktifList' => $pengirimanAktifList,
         ]);
     }
-
     public function driver()
     {
+        $driver = Driver::where('id_user', Auth::id())->firstOrFail();
+
+        // Statistik
+        $totalAktif = Pengiriman::where('id_driver', $driver->id)
+            ->whereNotIn('status', ['selesai'])
+            ->count();
+
+        $totalSelesai = Pengiriman::where('id_driver', $driver->id)
+            ->where('status', 'selesai')
+            ->count();
+
+        $totalSemua = Pengiriman::where('id_driver', $driver->id)->count();
+
+        // Pengiriman aktif hari ini
+        $aktifHariIni = Pengiriman::where('id_driver', $driver->id)
+            ->whereNotIn('status', ['selesai'])
+            ->with(['order.customer', 'order.unit', 'trackings'])
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Riwayat terakhir
+        $riwayatTerakhir = Pengiriman::where('id_driver', $driver->id)
+            ->where('status', 'selesai')
+            ->with(['order.customer', 'order.unit'])
+            ->latest()
+            ->take(3)
+            ->get();
+
         return view('pages.driver.dashboard', [
-            'title' => 'Dashboard Driver',
-            'user' => Auth::user(),
+            'title' => 'Dashboard',
+            'driver' => $driver,
+            'totalAktif' => $totalAktif,
+            'totalSelesai' => $totalSelesai,
+            'totalSemua' => $totalSemua,
+            'aktifHariIni' => $aktifHariIni,
+            'riwayatTerakhir' => $riwayatTerakhir,
         ]);
     }
 
@@ -100,19 +123,19 @@ class DashboardController extends Controller
             ->get();
 
         return view('pages.customer.dashboard', [
-            'title'         => 'Dashboard Customer',
-            'user'          => Auth::user(),
-            'totalOrders'   => (clone $ordersQuery)->count(),
-            'activeOrders'  => (clone $ordersQuery)
+            'title' => 'Dashboard Customer',
+            'user' => Auth::user(),
+            'totalOrders' => (clone $ordersQuery)->count(),
+            'activeOrders' => (clone $ordersQuery)
                 ->whereIn('status', ['menunggu', 'disetujui'])
                 ->count(),
             'completedOrders' => (clone $ordersQuery)
                 ->where('status', 'selesai')
                 ->count(),
             'unpaidInvoices' => (clone $ordersQuery)
-                ->whereHas('invoice', fn ($query) => $query->where('status_bayar', 'belum_bayar'))
+                ->whereHas('invoice', fn($query) => $query->where('status_bayar', 'belum_bayar'))
                 ->count(),
-            'recentOrders'  => $recentOrders,
+            'recentOrders' => $recentOrders,
         ]);
     }
 }

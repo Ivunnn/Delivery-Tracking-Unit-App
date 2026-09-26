@@ -12,15 +12,15 @@ return new class extends Migration {
         if (Schema::hasTable('users')) {
             if (Schema::hasTable('invoices')) {
                 Schema::table('invoices', function (Blueprint $table) {
-                    if (! Schema::hasColumn('invoices', 'bukti_bayar')) {
+                    if (!Schema::hasColumn('invoices', 'bukti_bayar')) {
                         $table->string('bukti_bayar')->nullable();
                     }
 
-                    if (! Schema::hasColumn('invoices', 'tgl_upload_bukti')) {
+                    if (!Schema::hasColumn('invoices', 'tgl_upload_bukti')) {
                         $table->timestamp('tgl_upload_bukti')->nullable();
                     }
 
-                    if (! Schema::hasColumn('invoices', 'status_verifikasi')) {
+                    if (!Schema::hasColumn('invoices', 'status_verifikasi')) {
                         $table->enum('status_verifikasi', [
                             'belum_upload',
                             'menunggu_verifikasi',
@@ -29,7 +29,7 @@ return new class extends Migration {
                         ])->default('belum_upload');
                     }
 
-                    if (! Schema::hasColumn('invoices', 'catatan_tolak')) {
+                    if (!Schema::hasColumn('invoices', 'catatan_tolak')) {
                         $table->text('catatan_tolak')->nullable();
                     }
                 });
@@ -87,11 +87,13 @@ return new class extends Migration {
             $table->string('warna', 50);
             $table->integer('tahun')->nullable();
             $table->decimal('harga', 15, 2)->nullable();
+            $table->string('foto')->nullable(); // ← tambah ini
             $table->enum('status', ['tersedia', 'dipesan', 'dikirim', 'terjual'])
                 ->default('tersedia');
             $table->text('keterangan')->nullable();
             $table->timestamps();
         });
+        
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_customer')->constrained('users')->cascadeOnDelete();

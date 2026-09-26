@@ -1,51 +1,8 @@
 @props(['products' => null])
 
 @php
-    $defaultProducts = [
-        [
-            'name' => 'Macbook pro 13"',
-            'variants' => 2,
-            'image' => '/images/product/product-01.jpg',
-            'category' => 'Laptop',
-            'price' => '$2399.00',
-            'status' => 'Delivered',
-        ],
-        [
-            'name' => 'Apple Watch Ultra',
-            'variants' => 1,
-            'image' => '/images/product/product-02.jpg',
-            'category' => 'Watch',
-            'price' => '$879.00',
-            'status' => 'Pending',
-        ],
-        [
-            'name' => 'iPhone 15 Pro Max',
-            'variants' => 2,
-            'image' => '/images/product/product-03.jpg',
-            'category' => 'SmartPhone',
-            'price' => '$1869.00',
-            'status' => 'Delivered',
-        ],
-        [
-            'name' => 'iPad Pro 3rd Gen',
-            'variants' => 2,
-            'image' => '/images/product/product-04.jpg',
-            'category' => 'Electronics',
-            'price' => '$1699.00',
-            'status' => 'Canceled',
-        ],
-        [
-            'name' => 'Airpods Pro 2nd Gen',
-            'variants' => 1,
-            'image' => '/images/product/product-05.jpg',
-            'category' => 'Accessories',
-            'price' => '$240.00',
-            'status' => 'Delivered',
-        ],
-    ];
-
+    
     $productsList = is_null($products) ? $defaultProducts : $products;
-
     // Helper function for status classes
     $getStatusClasses = function ($status) {
         $baseClasses = 'rounded-full px-2 py-0.5 text-theme-xs font-medium';
@@ -97,13 +54,13 @@
             <thead>
                 <tr class="border-t border-gray-100 dark:border-gray-800">
                     <th class="py-3 text-start">
-                        <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Products</p>
+                        <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Produk</p>
                     </th>
                     <th class="py-3 text-start">
-                        <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Category</p>
+                        <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Kategori</p>
                     </th>
                     <th class="py-3 text-start">
-                        <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Price</p>
+                        <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Harga</p>
                     </th>
                     <th class="py-3 text-start">
                         <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Status</p>

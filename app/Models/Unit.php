@@ -17,6 +17,7 @@ class Unit extends Model
         'warna',
         'tahun',
         'harga',
+        'foto',
         'status',
         'keterangan',
     ];
@@ -24,7 +25,7 @@ class Unit extends Model
     protected function casts(): array
     {
         return [
-            'harga'  => 'decimal:2',
+            'harga' => 'decimal:2',
             'status' => 'string',
         ];
     }
@@ -44,13 +45,20 @@ class Unit extends Model
     // ── Helper ──────────────────────────────────────────────
     public function getStatusBadgeAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'tersedia' => 'success',
-            'dipesan'  => 'warning',
-            'dikirim'  => 'info',
-            'terjual'  => 'error',
-            default    => 'default',
+            'dipesan' => 'warning',
+            'dikirim' => 'info',
+            'terjual' => 'error',
+            default => 'default',
         };
+    }
+
+    public function getFotoUrlAttribute(): string
+    {
+        return $this->foto
+            ? asset('storage/' . $this->foto)
+            : asset('images/placeholder-motor.png'); // fallback
     }
 
     public function getHargaFormatAttribute(): string

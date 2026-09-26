@@ -18,7 +18,6 @@ use App\Http\Controllers\Customer\TrackingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\RekeningBankController;
 
-
 // Locale Switch Route
 Route::get('/locale/{locale}', [LocaleController::class, 'switch'])->name('locale.switch');
 
@@ -106,7 +105,7 @@ Route::middleware(['auth', 'role:driver'])
     ->prefix('driver')
     ->name('driver.')
     ->group(function () {
-        Route::get('/dashboard', [PengirimanDriverController::class, 'dashboard'])
+        Route::get('/dashboard', [DashboardController::class, 'driver'])
             ->name('dashboard');
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -125,7 +124,6 @@ Route::middleware(['auth', 'role:driver'])
             [PengirimanDriverController::class, 'updateStatus']
         )
             ->name('pengiriman.update-status');
-
         Route::post(
             '/pengiriman/{pengiriman}/upload-bukti',
             [PengirimanDriverController::class, 'uploadBukti']
