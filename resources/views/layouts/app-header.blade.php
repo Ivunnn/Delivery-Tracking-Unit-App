@@ -50,10 +50,8 @@
 
             <!-- Logo (mobile only) -->
             <a href="/" class="xl:hidden">
-                <img class="h-auto w-[220px] max-w-[58vw] object-contain dark:hidden"
-                    src="/images/assets/logo-bg-dark.png" alt="Logo" />
-                <img class="hidden h-auto w-[220px] max-w-[58vw] object-contain dark:block"
-                    src="/images/assets/logo-bg-light.png" alt="Logo" />
+                <img class="h-10 w-10 object-contain" src="/images/assets/logo.png" alt="Delivery Tracking"
+                    width="40" height="40" fetchpriority="high" decoding="async" />
             </a>
 
             <!-- Application Menu Toggle (mobile only) -->

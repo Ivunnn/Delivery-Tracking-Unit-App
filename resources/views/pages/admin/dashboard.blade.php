@@ -140,7 +140,7 @@
                         @if ($order->unit->foto)
                           <img src="{{ $order->unit->foto_url }}"
                               alt="{{ $order->unit->tipe_motor }}"
-                              class="w-full h-full object-cover" />
+                              class="w-full h-full object-cover" loading="lazy" decoding="async" />
                         @else
                           <div class="w-full h-full flex items-center justify-center">
                               <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -2,18 +2,21 @@ import { createPopper } from '@popperjs/core';
 import './bootstrap';
 import Alpine from 'alpinejs';
 
-// flatpickr
-import flatpickr from 'flatpickr';
-import 'flatpickr/dist/flatpickr.min.css';
-
 window.Alpine = Alpine;
 window.createPopper = createPopper;
-window.flatpickr = flatpickr;
 
-Alpine.start();
+async function startApplication() {
+    // Load the date-picker only on pages that actually render one.
+    if (document.querySelector('[x-ref="datepicker"], [data-datepicker]')) {
+        const [{ default: flatpickr }] = await Promise.all([
+            import('flatpickr'),
+            import('flatpickr/dist/flatpickr.min.css'),
+        ]);
+        window.flatpickr = flatpickr;
+    }
 
-// Initialize components on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
+    Alpine.start();
+
     // Map imports
     if (document.querySelector('#mapOne')) {
         import('./components/map').then(module => module.initMap());
@@ -43,4 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('#calendar')) {
         import('./components/calendar-init').then(module => module.calendarInit());
     }
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startApplication, { once: true });
+} else {
+    startApplication();
+}

@@ -59,10 +59,10 @@
     <div class="pt-8 pb-7 flex items-center gap-2" :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'justify-center' : 'justify-between'">
         <a href="/">
             <div class="hidden [.sidebar-expanded_&]:block">
-                <img class="dark:hidden" src="/images/assets/logo-bg-dark.png" alt="Logo" width="150" height="40" />
-                <img class="hidden dark:block" src="/images/assets/logo-bg-light.png" alt="Logo" width="150" height="40" />
+                <img class="dark:hidden" src="/images/assets/logo-bg-dark.png" alt="Delivery Tracking" width="150" height="40" decoding="async" />
+                <img class="hidden dark:block" src="/images/assets/logo-bg-light.png" alt="Delivery Tracking" width="150" height="40" decoding="async" />
             </div>
-            <img class="block [.sidebar-expanded_&]:hidden" src="/images/assets/logo.png" alt="Logo" width="64" height="64" />
+            <img class="block [.sidebar-expanded_&]:hidden" src="/images/assets/logo.png" alt="Delivery Tracking" width="64" height="64" decoding="async" />
         </a>
     </div>
 

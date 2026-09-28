@@ -109,7 +109,7 @@
                                             class="w-10 h-10 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-700 shrink-0 bg-gray-50 dark:bg-gray-800">
                                             @if ($unit->foto)
                                                 <img src="{{ $unit->foto_url }}" alt="{{ $unit->tipe_motor }}"
-                                                    class="w-full h-full object-cover" />
+                                                    class="w-full h-full object-cover" loading="lazy" decoding="async" />
                                             @else
                                                 <div class="w-full h-full flex items-center justify-center">
                                                     <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none"
