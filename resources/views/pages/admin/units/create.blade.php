@@ -19,7 +19,7 @@
 
         {{-- Form --}}
         <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-            <form method="POST" action="{{ route('admin.units.store') }}" class="space-y-5">
+            <form method="POST" action="{{ route('admin.units.store') }}" enctype="multipart/form-data" class="space-y-5">
                 @csrf
 
                 <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -99,9 +99,7 @@
                         @error('keterangan')
                             <p class="mt-1.5 text-xs text-error-500">{{ $message }}</p>
                         @enderror
-                        <form method="POST" action="{{ route('admin.units.store') }}" enctype="multipart/form-data" {{-- ← wajib
-                            untuk upload file --}} class="space-y-5">
-                            {{-- Foto Unit --}}
+                        {{-- Foto Unit --}}
                             <div class="sm:col-span-2">
                                 <label for="foto" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Foto Unit <span class="text-xs font-normal text-gray-400">(opsional)</span>
@@ -114,7 +112,6 @@
                                 @enderror
                                 <p class="mt-1 text-xs text-gray-400">Format JPG, JPEG, PNG, WEBP. Maks 2MB.</p>
                             </div>
-                        </form>
                     </div>
                 </div>
 

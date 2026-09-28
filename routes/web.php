@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Customer\TrackingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\RekeningBankController;
+use App\Http\Controllers\Admin\MonitoringController;
 
 // Locale Switch Route
 Route::get('/locale/{locale}', [LocaleController::class, 'switch'])->name('locale.switch');
@@ -98,6 +99,11 @@ Route::middleware(['auth', 'role:admin'])
             [InvoiceController::class, 'tolakBukti']
         )
             ->name('invoices.tolak-bukti');
+
+        // Monitoring
+        Route::get('/monitoring', [MonitoringController::class, 'index'])->name('monitoring.index');
+        Route::get('/monitoring/{pengiriman}', [MonitoringController::class, 'show'])->name('monitoring.show');
+        Route::get('/monitoring/{pengiriman}/data', [MonitoringController::class, 'data'])->name('monitoring.data');
     });
 
 // ── Driver ───────────────────────────────────────────────────
