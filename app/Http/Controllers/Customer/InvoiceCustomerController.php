@@ -78,4 +78,18 @@ class InvoiceCustomerController extends Controller
         return redirect()->route('customer.invoices.show', $invoice)
             ->with('success', 'Bukti transfer berhasil diupload. Menunggu konfirmasi admin.');
     }
+
+    // ── Print ────────────────────────────────────────────────
+    public function print(Invoice $invoice)
+    {
+        $invoice->load([
+            'order.customer',
+            'order.unit',
+            'order.pengiriman',
+        ]);
+
+        return view('pages.customer.invoices.print', [
+            'invoice' => $invoice,
+        ]);
+    }
 }
