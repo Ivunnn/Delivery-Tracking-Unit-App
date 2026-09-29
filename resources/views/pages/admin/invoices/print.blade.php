@@ -1,44 +1,198 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice {{ $invoice->kode_invoice }}</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; font-size: 13px; color: #333; padding: 40px; }
-        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 2px solid #1B3A6B; }
-        .company-name { font-size: 20px; font-weight: bold; color: #1B3A6B; }
-        .company-sub { font-size: 12px; color: #666; margin-top: 4px; }
-        .invoice-title { text-align: right; }
-        .invoice-title h1 { font-size: 24px; font-weight: bold; color: #1B3A6B; }
-        .invoice-title p { font-size: 12px; color: #666; margin-top: 4px; }
-        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-top: 6px; }
-        .status-lunas { background: #d4edda; color: #155724; }
-        .status-pending { background: #fff3cd; color: #856404; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
-        .info-box h3 { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #666; margin-bottom: 8px; letter-spacing: 0.5px; }
-        .info-box p { font-size: 13px; color: #333; line-height: 1.6; }
-        .info-box .mono { font-family: monospace; font-size: 12px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
-        thead tr { background: #a5000d; color: white; }
-        thead th { padding: 10px 14px; text-align: left; font-size: 12px; }
-        tbody tr { border-bottom: 1px solid #eee; }
-        tbody td { padding: 10px 14px; font-size: 13px; }
-        .text-right { text-align: right; }
-        .total-section { margin-left: auto; width: 300px; }
-        .total-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-bottom: 1px solid #eee; }
-        .total-row.final { font-weight: bold; font-size: 15px; border-bottom: none; padding-top: 10px; color: #1B3A6B; }
-        .footer { margin-top: 48px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .sign-box { text-align: center; }
-        .sign-box .sign-line { width: 160px; border-top: 1px solid #333; margin-top: 60px; padding-top: 6px; font-size: 12px; }
-        .note { font-size: 11px; color: #888; margin-top: 32px; padding-top: 16px; border-top: 1px solid #eee; text-align: center; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #333;
+            padding: 40px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #1B3A6B;
+        }
+
+        .company-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1B3A6B;
+        }
+
+        .company-sub {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .invoice-title {
+            text-align: right;
+        }
+
+        .invoice-title h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1B3A6B;
+        }
+
+        .invoice-title p {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-top: 6px;
+        }
+
+        .status-lunas {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .info-box h3 {
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .info-box p {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .info-box .mono {
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+
+        thead tr {
+            background: #a5000d;
+            color: white;
+        }
+
+        thead th {
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody td {
+            padding: 10px 14px;
+            font-size: 13px;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .total-section {
+            margin-left: auto;
+            width: 300px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .total-row.final {
+            font-weight: bold;
+            font-size: 15px;
+            border-bottom: none;
+            padding-top: 10px;
+            color: #1B3A6B;
+        }
+
+        .footer {
+            margin-top: 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .sign-box {
+            text-align: center;
+        }
+
+        .sign-box .sign-line {
+            width: 160px;
+            border-top: 1px solid #333;
+            margin-top: 60px;
+            padding-top: 6px;
+            font-size: 12px;
+        }
+
+        .note {
+            font-size: 11px;
+            color: #888;
+            margin-top: 32px;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
         @media print {
-            body { padding: 20px; }
-            .no-print { display: none; }
+            body {
+                padding: 20px;
+            }
+
+            .no-print {
+                display: none;
+            }
         }
     </style>
 </head>
+
 <body>
 
     {{-- Tombol Cetak (hilang saat print) --}}
@@ -64,7 +218,8 @@
             <h1>INVOICE</h1>
             <p class="mono">{{ $invoice->kode_invoice }}</p>
             <p>{{ $invoice->created_at->format('d M Y') }}</p>
-            <span class="status-badge {{ $invoice->status_bayar === 'sudah_bayar' ? 'status-lunas' : 'status-pending' }}">
+            <span
+                class="status-badge {{ $invoice->status_bayar === 'sudah_bayar' ? 'status-lunas' : 'status-pending' }}">
                 {{ $invoice->status_bayar === 'sudah_bayar' ? '✓ LUNAS' : '⏳ BELUM BAYAR' }}
             </span>
         </div>
@@ -168,4 +323,5 @@
     </div>
 
 </body>
+
 </html>
