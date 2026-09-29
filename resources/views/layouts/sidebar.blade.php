@@ -59,10 +59,10 @@
     <div class="pt-8 pb-7 flex items-center gap-2" :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'justify-center' : 'justify-between'">
         <a href="/">
             <div class="hidden [.sidebar-expanded_&]:block">
-                <img class="dark:hidden" src="/images/assets/logo-bg-dark.png" alt="Delivery Tracking" width="150" height="40" decoding="async" />
-                <img class="hidden dark:block" src="/images/assets/logo-bg-light.png" alt="Delivery Tracking" width="150" height="40" decoding="async" />
+                <img class="dark:hidden" src="/images/assets/Honda_Logo.webp" alt="Delivery Tracking" width="60" height="40" decoding="async" />
+                <img class="hidden dark:block" src="/images/assets/Honda_Logo.webp" alt="Delivery Tracking" width="60" height="40" decoding="async" />
             </div>
-            <img class="block [.sidebar-expanded_&]:hidden" src="/images/assets/logo.png" alt="Delivery Tracking" width="64" height="64" decoding="async" />
+            <img class="block [.sidebar-expanded_&]:hidden" src="/images/assets/Honda_Logo.webp" alt="Delivery Tracking" width="64" height="64" decoding="async" />
         </a>
     </div>
 
@@ -129,7 +129,7 @@
                                             <svg x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                                                 class="ltr:ml-auto rtl:mr-auto w-5 h-5 transition-transform duration-200"
                                                 :class="{
-                                                    'rotate-180 text-brand-500': isSubmenuOpen({{ $groupIndex }},
+                                                    'rotate-180 text-red-500': isSubmenuOpen({{ $groupIndex }},
                                                         {{ $itemIndex }}),
                                                     'text-gray-500 dark:text-gray-400': !isSubmenuOpen(
                                                         {{ $groupIndex }}, {{ $itemIndex }})
@@ -199,7 +199,7 @@
                                                 {{ __($item['name']) }}
                                                 @if (!empty($item['new']))
                                                     <span
-                                                        class="ltr:ml-2 rtl:mr-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-brand-500 text-white">
+                                                        class="ltr:ml-2 rtl:mr-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-500 text-white">
                                                         {{ __('new') }}
                                                     </span>
                                                 @endif

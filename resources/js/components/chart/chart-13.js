@@ -249,7 +249,7 @@ export function initChartThirteen() {
                 position: "top",
                 horizontalAlign: "left",
             },
-            colors: ["#465FFF"],
+            colors: ["#e60012"],
             chart: {
                 fontFamily: "Outfit, sans-serif",
                 height: 335,

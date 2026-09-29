@@ -4,7 +4,7 @@
     <div class="relative z-1 bg-white p-6 sm:p-0 dark:bg-gray-900">
         <div class="flex h-screen w-full flex-col justify-center sm:p-0 lg:flex-row dark:bg-gray-900">
             <div class="bg-brand-950 dark:bg-white/5 relative hidden h-full w-full items-center lg:grid lg:w-1/2 bg-cover bg-center bg-no-repeat"
-                style="background-image: url('{{ asset('images/assets/bg-login.webp') }}');">
+                style="background-image: url('{{ asset('images/assets/image.png') }}');">
 
                 <!-- Lapisan Overlay Gelap -->
                 <div class="absolute inset-0 bg-black/60"></div>
@@ -15,7 +15,7 @@
                     <div class="flex max-w-xs flex-col items-center">
                         <a href="/" class="mb-4 block">
                             <!-- Sekalian bungkus src logo pakai asset() agar URL-nya aman -->
-                            <img src="{{ asset('images/assets/logo-bg-light.png') }}" alt="Logo" />
+                            <img src="{{ asset('images/assets/Honda_Logo.webp') }}" alt="Logo" />
                         </a>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                                     {{-- Button --}}
                                     <div>
                                         <button type="submit"
-                                            class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition">
+                                            class="bg-red-500 shadow-theme-xs hover:bg-red-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition">
                                             Masuk
                                         </button>
                                     </div>
@@ -127,7 +127,7 @@
                                     <p class="text-center text-sm text-gray-500 dark:text-gray-400">
                                         Belum punya akun?
                                         <a href="{{ route('signup') }}"
-                                            class="text-brand-500 hover:text-brand-600 font-medium">
+                                            class="text-red-500 hover:text-red-600 font-medium">
                                             Daftar sekarang
                                         </a>
                                     </p>
@@ -142,7 +142,7 @@
             <!-- Toggler -->
             <div class="fixed right-6 bottom-6 z-50">
                 <button
-                    class="bg-brand-500 hover:bg-brand-600 inline-flex size-14 items-center justify-center rounded-full text-white transition-colors"
+                    class="bg-red-500 hover:bg-red-600 inline-flex size-14 items-center justify-center rounded-full text-white transition-colors"
                     @click.prevent="$store.theme.toggle()">
                     <svg class="hidden fill-current dark:block" width="20" height="20" viewBox="0 0 20 20" fill="none"
                         xmlns="http://www.w3.org/2000/svg">

@@ -21,7 +21,7 @@
         .info-box p { font-size: 13px; color: #333; line-height: 1.6; }
         .info-box .mono { font-family: monospace; font-size: 12px; }
         table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
-        thead tr { background: #1B3A6B; color: white; }
+        thead tr { background: #a5000d; color: white; }
         thead th { padding: 10px 14px; text-align: left; font-size: 12px; }
         tbody tr { border-bottom: 1px solid #eee; }
         tbody td { padding: 10px 14px; font-size: 13px; }
@@ -44,7 +44,7 @@
     {{-- Tombol Cetak (hilang saat print) --}}
     <div class="no-print" style="margin-bottom: 24px;">
         <button onclick="window.print()"
-            style="background:#1B3A6B;color:white;border:none;padding:10px 24px;border-radius:8px;font-size:13px;cursor:pointer;margin-right:8px;">
+            style="background:#c90010;color:white;border:none;padding:10px 24px;border-radius:8px;font-size:13px;cursor:pointer;margin-right:8px;">
             🖨️ Cetak / Simpan PDF
         </button>
         <button onclick="window.close()"

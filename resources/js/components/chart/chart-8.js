@@ -20,7 +20,7 @@ export function initChartEight() {
                 position: "top",
                 horizontalAlign: "left",
             },
-            colors: ["#465FFF", "#9CB9FF"],
+            colors: ["#e60012", "#fda4af"],
             chart: {
                 fontFamily: "Outfit, sans-serif",
                 height: 310,
