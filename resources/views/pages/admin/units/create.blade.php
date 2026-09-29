@@ -99,19 +99,20 @@
                         @error('keterangan')
                             <p class="mt-1.5 text-xs text-error-500">{{ $message }}</p>
                         @enderror
-                        {{-- Foto Unit --}}
-                            <div class="sm:col-span-2">
-                                <label for="foto" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Foto Unit <span class="text-xs font-normal text-gray-400">(opsional)</span>
-                                </label>
-                                <input type="file" id="foto" name="foto" accept="image/jpg,image/jpeg,image/png,image/webp"
-                                    class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 file:mr-4 file:rounded file:border-0 file:bg-brand-50 file:px-3 file:py-1 file:text-xs file:font-medium file:text-brand-600 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90
-                    {{ $errors->has('foto') ? 'border-error-400' : '' }}" />
-                                @error('foto')
-                                    <p class="mt-1.5 text-xs text-error-500">{{ $message }}</p>
-                                @enderror
-                                <p class="mt-1 text-xs text-gray-400">Format JPG, JPEG, PNG, WEBP. Maks 2MB.</p>
-                            </div>
+                    </div>
+
+                    {{-- Foto Unit --}}
+                    <div class="sm:col-span-2">
+                        <label for="foto" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Foto Unit <span class="text-xs font-normal text-gray-400">(opsional)</span>
+                        </label>
+                        <input type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/webp"
+                            class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 file:mr-4 file:rounded file:border-0 file:bg-brand-50 file:px-3 file:py-1 file:text-xs file:font-medium file:text-brand-600 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90
+                                {{ $errors->has('foto') ? 'border-error-400' : '' }}" />
+                        @error('foto')
+                            <p class="mt-1.5 text-xs text-error-500">{{ $message }}</p>
+                        @enderror
+                        <p class="mt-1 text-xs text-gray-400">Format JPG, JPEG, PNG, WEBP. Maks 2MB.</p>
                     </div>
                 </div>
 

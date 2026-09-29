@@ -57,8 +57,8 @@ class Unit extends Model
     public function getFotoUrlAttribute(): string
     {
         return $this->foto
-            ? asset('storage/' . $this->foto)
-            : asset('images/placeholder-motor.png'); // fallback
+            ? url('storage/' . ltrim($this->foto, '/'))
+            : asset('images/assets/Honda_Logo.png');
     }
 
     public function getHargaFormatAttribute(): string

@@ -29,13 +29,17 @@
         {{-- Kolom Kiri: Detail Unit --}}
         <div class="lg:col-span-2 space-y-6">
 
-            {{-- Placeholder Gambar --}}
+            {{-- Gambar Unit --}}
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 overflow-hidden">
                 <div class="h-64 bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center">
-                    <svg class="w-32 h-32 text-gray-300 dark:text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"
-                            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
-                    </svg>
+                    @if ($unit->foto)
+                        <img src="{{ $unit->foto_url }}" alt="Foto {{ $unit->tipe_motor }}"
+                            class="h-full w-full object-contain p-4" decoding="async"
+                            onerror="this.onerror=null;this.src='{{ asset('images/assets/Honda_Logo.png') }}';" />
+                    @else
+                        <img src="{{ asset('images/assets/Honda_Logo.png') }}" alt="Foto unit belum tersedia"
+                            class="h-full w-full object-contain p-4" decoding="async" />
+                    @endif
                 </div>
             </div>
 

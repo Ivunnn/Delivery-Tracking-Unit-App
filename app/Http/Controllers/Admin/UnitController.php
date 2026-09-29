@@ -67,11 +67,27 @@ class UnitController extends Controller
             'foto.max' => 'Ukuran foto maksimal 2MB.',
         ]);
 
+        $fotoPath = null;
         if ($request->hasFile('foto')) {
-            $validated['foto'] = $request->file('foto')->store('units', 'public');
+            $foto = $request->file('foto');
+
+            if (! $foto->isValid()) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['foto' => 'Foto gagal diunggah. Silakan pilih file lain dan coba lagi.']);
+            }
+
+            $fotoPath = $foto->store('units', 'public');
+
+            if ($fotoPath === false) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['foto' => 'Foto tidak dapat disimpan di server.']);
+            }
         }
 
         $validated['status'] = 'tersedia';
+        $validated['foto'] = $fotoPath;
 
         Unit::create($validated);
 
@@ -117,12 +133,29 @@ class UnitController extends Controller
             'foto.max' => 'Ukuran foto maksimal 2MB.',
         ]);
 
-        // Upload foto baru, hapus yang lama
+        // Upload foto baru, hapus yang lama setelah file baru berhasil disimpan.
         if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+
+            if (! $foto->isValid()) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['foto' => 'Foto gagal diunggah. Silakan pilih file lain dan coba lagi.']);
+            }
+
+            $fotoPath = $foto->store('units', 'public');
+
+            if ($fotoPath === false) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['foto' => 'Foto tidak dapat disimpan di server.']);
+            }
+
             if ($unit->foto) {
                 Storage::disk('public')->delete($unit->foto);
             }
-            $validated['foto'] = $request->file('foto')->store('units', 'public');
+
+            $validated['foto'] = $fotoPath;
         }
 
         // Hapus foto kalau centang hapus
