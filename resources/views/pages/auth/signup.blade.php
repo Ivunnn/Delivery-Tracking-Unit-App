@@ -9,7 +9,7 @@
                 <div class="relative z-10 flex items-center justify-center">
                     <div class="flex max-w-xs flex-col items-center">
                         <a href="/" class="mb-4 block">
-                            <img src="{{ asset('images/assets/Honda_logo.webp') }}" alt="Logo" />
+                            <img src="{{ asset('images/assets/Honda_Logo.webp') }}" alt="Logo" />
                         </a>
                     </div>
                 </div>
