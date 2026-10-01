@@ -168,22 +168,6 @@ Alamat layanan default:
 - Vite: [http://localhost:5173](http://localhost:5173)
 - Mailpit: [http://localhost:8025](http://localhost:8025)
 
-## Akun Demo
-
-Akun berikut dibuat oleh `UserSeeder`:
-
-| Role     | Email                 | Password   |
-| -------- | --------------------- | ---------- |
-| Admin    | `admin@anugerah.com`  | `password` |
-| Driver   | `budi@anugerah.com`   | `password` |
-| Driver   | `agus@anugerah.com`   | `password` |
-| Driver   | `roni@anugerah.com`   | `password` |
-| Customer | `lamongan@dealer.com` | `password` |
-| Customer | `tuban@dealer.com`    | `password` |
-| Customer | `cepu@dealer.com`     | `password` |
-
-Jangan gunakan password demo untuk lingkungan production.
-
 ## Struktur Modul
 
 ```text
